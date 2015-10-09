@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context="com.hardsoftstudio.rxflux.sample.UserFragment"
+    >
+
+  <TextView
+      android:id="@+id/user_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textStyle="bold"
+      android:textSize="20sp"
+      tools:text="User name"
+      />
+
+  <TextView
+      android:id="@+id/login"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="15sp"
+      tools:text="login"
+      />
+
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:layout_marginTop="10dp"
+      android:layout_marginBottom="10dp"
+      android:background="#60000000"
+      />
+
+  <TextView
+      android:id="@+id/statistics"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:lineSpacingExtra="5dp"
+      tools:text="Public repos: 5\nPublic gist 2"
+      />
+
+</LinearLayout>

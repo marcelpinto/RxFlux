@@ -1,0 +1,40 @@
+package com.hardsoftstudio.rxflux.sample.stores;
+
+import com.hardsoftstudio.rxflux.action.RxAction;
+import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
+import com.hardsoftstudio.rxflux.sample.actions.Actions;
+import com.hardsoftstudio.rxflux.sample.actions.Keys;
+import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
+import com.hardsoftstudio.rxflux.store.RxStore;
+import com.hardsoftstudio.rxflux.store.RxStoreChange;
+import java.util.ArrayList;
+
+/**
+ * Created by marcel on 10/09/15.
+ */
+public class RepositoriesStore extends RxStore implements RepositoriesStoreInterface {
+
+  public static final String ID = "RepositoriesStore";
+  private ArrayList<GitHubRepo> gitHubRepos;
+
+  public RepositoriesStore(Dispatcher dispatcher) {
+    super(dispatcher);
+  }
+
+  @Override
+  public void onRxAction(RxAction action) {
+    switch (action.getType()) {
+      case Actions.GET_PUBLIC_REPOS:
+        this.gitHubRepos = (ArrayList<GitHubRepo>) action.getData().get(Keys.PUBLIC_REPOS);
+        break;
+      default: // IMPORTANT if we don't modify the store just ignore
+        return;
+    }
+    postChange(new RxStoreChange(ID, action));
+  }
+
+  @Override
+  public ArrayList<GitHubRepo> getRepositories() {
+    return gitHubRepos == null ? new ArrayList<GitHubRepo>() : gitHubRepos;
+  }
+}
