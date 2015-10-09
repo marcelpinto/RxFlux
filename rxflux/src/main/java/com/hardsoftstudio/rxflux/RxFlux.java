@@ -35,7 +35,6 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
     if (instance == null) return;
     instance.subscriptionManager.clear();
     instance.dispatcher.unregisterAll();
-    instance = null;
   }
 
   public RxBus getRxBus() {

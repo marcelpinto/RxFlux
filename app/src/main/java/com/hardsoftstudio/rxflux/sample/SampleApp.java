@@ -29,6 +29,9 @@ public class SampleApp extends Application {
     rxFlux = RxFlux.init();
     gitHubActionCreator = new GitHubActionCreator(this, rxFlux.getDispatcher(),
         rxFlux.getSubscriptionManager());
+
+    // TODO change this into a singleton inside the store. Because in this way the stores get
+    // unregistered when we close the app and reopen it from recents.
     repositoriesStore = new RepositoriesStore(rxFlux.getDispatcher());
     usersStore = new UsersStore(rxFlux.getDispatcher());
     registerActivityLifecycleCallbacks(rxFlux);
