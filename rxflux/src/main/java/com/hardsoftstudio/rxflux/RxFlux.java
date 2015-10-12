@@ -10,6 +10,9 @@ import com.hardsoftstudio.rxflux.util.SubscriptionManager;
 
 /**
  * Created by marcel on 09/09/15.
+ * Main class, the init method of this class must be called onCreate of the Application and must
+ * be called just once. This class will automatically track the lifecycle of the application and
+ * unregister all the remaining subscriptions for each activity.
  */
 public class RxFlux implements Application.ActivityLifecycleCallbacks {
 
@@ -37,14 +40,26 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
     instance.dispatcher.unregisterAll();
   }
 
+  /**
+   *
+   * @return the instance of the RxBus in case you want to reused for something else
+   */
   public RxBus getRxBus() {
     return rxBus;
   }
 
+  /**
+   *
+   * @return the instance of the dispatcher
+   */
   public Dispatcher getDispatcher() {
     return dispatcher;
   }
 
+  /**
+   *
+   * @return the instance of the subscription manager in case you want to reuse for something else
+   */
   public SubscriptionManager getSubscriptionManager() {
     return subscriptionManager;
   }

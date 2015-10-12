@@ -9,6 +9,8 @@ import rx.functions.Func1;
 
 /**
  * Created by marcel on 13/08/15.
+ * RxFlux dispatcher, contains the the registered actions, stores and the instance of the RxBus
+ * responsible to send events to the stores. This class is used as a singleton.
  */
 public class Dispatcher {
 
