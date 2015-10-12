@@ -24,7 +24,7 @@
 
 <p>RxFlux is small light-weight framework that makes it easy to follow the <a href="https://facebook.github.io/flux/docs/overview.html">Flux pattern</a> with RxJava functionalities.</p>
 
-<p>In order to understand more how to use Flux pattern in Android <a href="https://github.com/lgvalle" class="user-mention">@lgvalle</a> created a nice <a href="https://github.com/lgvalle/android-flux-todo-app">example and explanation</a>. I would recommend to read it before continuing.</p>
+<p>In order to understand more how to use Flux pattern in Android <a href="https://github.com/lgvalle">@lgvalle</a> created a nice <a href="https://github.com/lgvalle/android-flux-todo-app">example and explanation</a>. I would recommend to read it before continuing.</p>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
@@ -33,6 +33,8 @@
 
 <pre><code>TODO when the first version is uploaded to maven update here the explanation.
 </code></pre>
+
+<p>IMPORTANT in order to follow the instructions is highly recommended to look at the example provided in the repo.</p>
 
 <p>The main class is the RxFlux, is the responsible to handle activity lifecycle in order to notify and register stores and views. </p>
 
@@ -51,9 +53,9 @@
 <h3>
 <a id="view" class="anchor" href="#view" aria-hidden="true"><span class="octicon octicon-link"></span></a>View</h3>
 
-<p>Each activity of your app must implements RxStoreDispatch. This interface defines the methods needed for each view (on Android it applies for our Activity). </p>
+<p>Each activity of your app must implements RxViewDispatch. This interface defines the methods needed for each view (on Android it applies for our Activity). </p>
 
-<p>RxFlux will notify each activity that implements RxStoreDispatch during the creation of it and will call <code>onRxStoresRegister()</code> in this method we must call the instance of the needed stores and register them.</p>
+<p>RxFlux will notify each activity that implements RxViewDispatch during the creation of it and will call <code>onRxStoresRegister()</code> in this method we must call the instance of the needed stores and register them.</p>
 
 <p>For example: (see stores section for more)</p>
 
@@ -65,7 +67,7 @@
 
 <p>RxFlux will register store change for each activity during the <code>onResume</code> method and then call <code>onRxViewRegistered()</code> so we can register the activity fragments or custom views. (Todo see how to register)</p>
 
-<p>The last method we must implement is <code>onRxStoreChanged(RxStoreChange change)</code> here we will get notified by any store change that occurs in our app. For that reasons we must filter by storeId to identify which store has change.</p>
+<p><code>onRxStoreChanged(RxStoreChange change)</code> here we will get notified by any store change that occurs in our app. For that reasons we must filter by storeId to identify which store has change.</p>
 
 <div class="highlight highlight-source-java"><pre>  @<span class="pl-smi">Override</span>
   <span class="pl-k">public</span> <span class="pl-k">void</span> onRxStoreChanged(<span class="pl-smi">RxStoreChange</span> change) {
@@ -76,18 +78,120 @@
     }
   }</pre></div>
 
+<p>Finally we should implement the <code>onRxError(RxError error)</code> it will notify when and error has occurred, so we can get the action used for it and the throwable instance, and for example retry the action. </p>
+
 <h3>
 <a id="rxactioncreator" class="anchor" href="#rxactioncreator" aria-hidden="true"><span class="octicon octicon-link"></span></a>RxActionCreator</h3>
 
+<p>Next step is to create our ActionsCreator in order to do so, we create a new class and extends the RxActionCreator.
+Basically this abstract class will provide us with some extra functionality to handle the creation of the actions and the request.</p>
+
+<p>The recommended way is to create and interface that defines the type of Actions and the methods. Following the example we can see we have the following interface.</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">Actions</span> {
+
+  <span class="pl-smi">String</span> <span class="pl-c1">GET_PUBLIC_REPOS</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>get_public_repos<span class="pl-pds">"</span></span>;
+  <span class="pl-smi">String</span> <span class="pl-c1">GET_USER</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>get_user<span class="pl-pds">"</span></span>;
+
+  <span class="pl-k">void</span> <span class="pl-en">getPublicRepositories</span>();
+
+  <span class="pl-k">void</span> <span class="pl-en">getUserDetails</span>(<span class="pl-smi">String</span> <span class="pl-v">userId</span>);
+}</pre></div>
+
+<p>Then our ActionsCreator will look like:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">GitHubActionCreator</span> <span class="pl-k">extends</span> <span class="pl-e">RxActionCreator</span> <span class="pl-k">implements</span> <span class="pl-e">Actions</span> { 
+   <span class="pl-c1">...</span>
+}</pre></div>
+
+<p>The construction will need the instance of the Dispatcher and SubscriptionManager that you can get from RxFlux.
+The SubscriptionManager is an important class that handles subscriptions by tag, the tag is the hashCode of the RxAction that we create, this will help us to avoid duplicated action running in the same time and make sure we unsubscribe from the Subscriptions whenever the app close. Also allows us a simple mechanism to cancel request.</p>
+
+<p>The RxActionCreator offer the following methods:</p>
+
+<p><code>boolean hasRxAction(RxAction rxAction)</code> Checks if there is already and action running.
+<code>void removeRxAction(RxAction rxAction)</code> Remove the specific action if exists
+<code>RxAction newRxAction(@NonNull String actionId, @NonNull Object... data)</code> Creates a new RxAction with the specific actionId and the data. This object must be a key-value pair i.e newRxAction(GET_USER, Keys.ID, userId);
+<code>postRxAction(RxAction action)</code> Will send the action into the dispatcher
+<code>postError(RxAction action, Throwable throwable)</code> Creates a new RxError instance that contains the RxAction created and the throwable instance then will post the error into the dispatcher so the store can react to it.</p>
+
+<h3>
+<a id="rxaction" class="anchor" href="#rxaction" aria-hidden="true"><span class="octicon octicon-link"></span></a>RxAction</h3>
+
+<p>This class represent an action of RxFlux, it contains the type and a key-value pair with the data. It's use to trigger events in the dispatcher.</p>
+
+<h3>
+<a id="rxstore" class="anchor" href="#rxstore" aria-hidden="true"><span class="octicon octicon-link"></span></a>RxStore</h3>
+
+<p>This class represents the Model + Logic of the app. In order to simplify the creation of it, every Store that we want to create must extends the abstract class. </p>
+
+<p>The best way to use them is in a DI system or a singleton pattern. Once register to the dispatcher the store will get all the RxActions from the dispatcher, then we can filter by type and store the data, update our model or do the logic of our app, once this is done we should call postChange() to notify the View.</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">RepositoriesStore</span> <span class="pl-k">extends</span> <span class="pl-e">RxStore</span> <span class="pl-k">implements</span> <span class="pl-e">RepositoriesStoreInterface</span> {
+
+  <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">String</span> <span class="pl-c1">ID</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>RepositoriesStore<span class="pl-pds">"</span></span>;
+  <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-smi">RepositoriesStore</span> instance;
+  <span class="pl-k">private</span> <span class="pl-k">ArrayList&lt;<span class="pl-smi">GitHubRepo</span>&gt;</span> gitHubRepos;
+
+  <span class="pl-k">private</span> <span class="pl-en">RepositoriesStore</span>(<span class="pl-smi">Dispatcher</span> <span class="pl-v">dispatcher</span>) {
+    <span class="pl-v">super</span>(dispatcher);
+  }
+
+  <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">synchronized</span> <span class="pl-smi">RepositoriesStore</span> <span class="pl-en">get</span>(<span class="pl-smi">Dispatcher</span> <span class="pl-v">dispatcher</span>) {
+    <span class="pl-k">if</span> (instance <span class="pl-k">==</span> <span class="pl-c1">null</span>) instance <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">RepositoriesStore</span>(dispatcher);
+    <span class="pl-k">return</span> instance;
+  }
+
+  <span class="pl-k">@Override</span>
+  <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onRxAction</span>(<span class="pl-smi">RxAction</span> <span class="pl-v">action</span>) {
+    <span class="pl-k">switch</span> (action<span class="pl-k">.</span>getType()) {
+      <span class="pl-k">case</span> <span class="pl-smi">Actions</span><span class="pl-c1"><span class="pl-k">.</span>GET_PUBLIC_REPOS</span><span class="pl-k">:</span>
+        <span class="pl-v">this</span><span class="pl-k">.</span>gitHubRepos <span class="pl-k">=</span> (<span class="pl-k">ArrayList&lt;<span class="pl-smi">GitHubRepo</span>&gt;</span>) action<span class="pl-k">.</span>getData()<span class="pl-k">.</span>get(<span class="pl-smi">Keys</span><span class="pl-c1"><span class="pl-k">.</span>PUBLIC_REPOS</span>);
+        <span class="pl-k">break</span>;
+      <span class="pl-k">default</span><span class="pl-k">:</span> <span class="pl-c">// IMPORTANT if we don't modify the store just ignore</span>
+        <span class="pl-k">return</span>;
+    }
+    postChange(<span class="pl-k">new</span> <span class="pl-smi">RxStoreChange</span>(<span class="pl-c1">ID</span>, action));
+  }
+
+  <span class="pl-k">@Override</span>
+  <span class="pl-k">public</span> <span class="pl-k">ArrayList&lt;<span class="pl-smi">GitHubRepo</span>&gt;</span> <span class="pl-en">getRepositories</span>() {
+    <span class="pl-k">return</span> gitHubRepos <span class="pl-k">==</span> <span class="pl-c1">null</span> <span class="pl-k">?</span> <span class="pl-k">new</span> <span class="pl-k">ArrayList&lt;<span class="pl-smi">GitHubRepo</span>&gt;</span>() <span class="pl-k">:</span> gitHubRepos;
+  }
+}</pre></div>
+
+<p>Finally each store should provide an interface so the View can request the model. As you can see in the example we provide the getRepositories().</p>
+
 <h2>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h2>
+<a id="final-notes" class="anchor" href="#final-notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Final notes</h2>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>RxFlux just provide an easy way to implement Flux pattern, it requires manual integration and the developer must follow the Flux flow in order to work properly.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+<li>Clean architecture.</li>
+<li>Simple flow.</li>
+<li>Logic abstraction and well defined.</li>
+<li>Simple to test.</li>
+<li>Modular.</li>
+<li>Reactive.</li>
+<li>Easy to add Hooks, like tracking tools. </li>
+</ul>
+
+<p><strong>Contras:</strong></p>
+
+<ul>
+<li>One way, restrictive flow.</li>
+<li>Different pattern, needs to learn a bit before using it.</li>
+</ul>
 
 <h2>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h2>
+<a id="author" class="anchor" href="#author" aria-hidden="true"><span class="octicon octicon-link"></span></a>Author</h2>
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+<p>This framework was developed by <a href="https://github.com/skimarxall" class="user-mention">@skimarxall</a>. It is being used in a private production environment. The idea of this framework came after reading the article of <a href="https://github.com/lgvalle" class="user-mention">@lgvalle</a>. </p>
+
+<p>The contributions are totally welcome, but all the PR must follow the coding rules defined <a href="https://github.com/square/java-code-styles/blob/master/configs/codestyles/SquareAndroid.xml">here</a>.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/skimarxall/RxFlux">Rxflux</a> is maintained by <a href="https://github.com/skimarxall">skimarxall</a>.</span>
