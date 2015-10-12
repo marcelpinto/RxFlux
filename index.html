@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Rxflux by skimarxall</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Rxflux</h1>
+      <h2 class="project-tagline">RxFlux is a small framework in order to follow Flux design pattern with RxJava functionalities</h2>
+      <a href="https://github.com/skimarxall/RxFlux" class="btn">View on GitHub</a>
+      <a href="https://github.com/skimarxall/RxFlux/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/skimarxall/RxFlux/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>RxFlux is small light-weight framework that makes it easy to follow the <a href="https://facebook.github.io/flux/docs/overview.html">Flux pattern</a> with RxJava functionalities.</p>
+
+<p>In order to understand more how to use Flux pattern in Android <a href="https://github.com/lgvalle">@lgvalle</a> created a nice <a href="https://github.com/lgvalle/android-flux-todo-app">example and explanation</a>. I would recommend to read it before continuing.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Gradle:</p>
+
+<pre><code>TODO when the first version is uploaded to maven update here the explanation.
+</code></pre>
+
+<p>The main class is the RxFlux, is the responsible to handle activity lifecycle in order to notify and register stores and views. </p>
+
+<p>First thing you must do is in init RxFlux in your Application instance</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">void</span> onCreate() {
+    <span class="pl-v">super</span><span class="pl-k">.</span>onCreate();
+    rxFlux <span class="pl-k">=</span> <span class="pl-smi">RxFlux</span><span class="pl-k">.</span>init();
+}</pre></div>
+
+<p>This will make RxFlux register into the activity lifecycle and init the internal classes.</p>
+
+<p>From now on we will follow the image below to understand each step
+<img src="https://raw.githubusercontent.com/lgvalle/lgvalle.github.io/master/public/images/flux-graph-complete.png" alt="Flux architecture"></p>
+
+<h3>
+<a id="view" class="anchor" href="#view" aria-hidden="true"><span class="octicon octicon-link"></span></a>View</h3>
+
+<p>Each activity of your app must implements RxStoreDispatch. This interface defines the methods needed for each view (on Android it applies for our Activity). </p>
+
+<p>RxFlux will notify each activity that implements RxStoreDispatch during the creation of it and will call <code>onRxStoresRegister()</code> in this method we must call the instance of the needed stores and register them.</p>
+
+<p>For example: (see stores section for more)</p>
+
+<div class="highlight highlight-source-java"><pre>@<span class="pl-smi">Override</span>
+  <span class="pl-k">public</span> <span class="pl-k">void</span> onRxStoresRegister() {
+    repositoriesStore <span class="pl-k">=</span> <span class="pl-smi">RepositoriesStore</span><span class="pl-k">.</span>get(mDispatcher);
+    repositoriesStore<span class="pl-k">.</span>register();
+}</pre></div>
+
+<p>RxFlux will register store change for each activity during the <code>onResume</code> method and then call <code>onRxViewRegistered()</code> so we can register the activity fragments or custom views. (Todo see how to register)</p>
+
+<p>The last method we must implement is <code>onRxStoreChanged(RxStoreChange change)</code> here we will get notified by any store change that occurs in our app. For that reasons we must filter by storeId to identify which store has change.</p>
+
+<div class="highlight highlight-source-java"><pre>  @<span class="pl-smi">Override</span>
+  <span class="pl-k">public</span> <span class="pl-k">void</span> onRxStoreChanged(<span class="pl-smi">RxStoreChange</span> change) {
+    <span class="pl-k">switch</span> (change<span class="pl-k">.</span>getStoreId()) {
+      <span class="pl-k">case</span> <span class="pl-smi">RepositoriesStore</span><span class="pl-c1"><span class="pl-k">.</span>ID</span><span class="pl-k">:</span>
+        <span class="pl-c">// Identify which type of action was and update view according to that</span>
+        <span class="pl-k">break</span>;
+    }
+  }</pre></div>
+
+<h3>
+<a id="rxactioncreator" class="anchor" href="#rxactioncreator" aria-hidden="true"><span class="octicon octicon-link"></span></a>RxActionCreator</h3>
+
+<h2>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h2>
+
+<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+
+<h2>
+<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h2>
+
+<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/skimarxall/RxFlux">Rxflux</a> is maintained by <a href="https://github.com/skimarxall">skimarxall</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
