@@ -1,7 +1,7 @@
 package com.hardsoftstudio.rxflux.util;
 
 import android.support.v4.util.ArrayMap;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 import com.hardsoftstudio.rxflux.action.RxAction;
 import rx.Subscription;
 
