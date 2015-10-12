@@ -4,8 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import com.hardsoftstudio.rxflux.RxFlux;
 import com.hardsoftstudio.rxflux.sample.actions.GitHubActionCreator;
-import com.hardsoftstudio.rxflux.sample.stores.RepositoriesStore;
-import com.hardsoftstudio.rxflux.sample.stores.UsersStore;
 
 /**
  * Created by marcel on 10/09/15.
@@ -19,8 +17,6 @@ public class SampleApp extends Application {
    * the variable reference here.
    */
   private GitHubActionCreator gitHubActionCreator;
-  private RepositoriesStore repositoriesStore;
-  private UsersStore usersStore;
 
   @Override
   public void onCreate() {
@@ -30,10 +26,6 @@ public class SampleApp extends Application {
     gitHubActionCreator = new GitHubActionCreator(this, rxFlux.getDispatcher(),
         rxFlux.getSubscriptionManager());
 
-    // TODO change this into a singleton inside the store. Because in this way the stores get
-    // unregistered when we close the app and reopen it from recents.
-    repositoriesStore = new RepositoriesStore(rxFlux.getDispatcher());
-    usersStore = new UsersStore(rxFlux.getDispatcher());
     registerActivityLifecycleCallbacks(rxFlux);
   }
 
@@ -41,15 +33,12 @@ public class SampleApp extends Application {
     return ((SampleApp) context.getApplicationContext());
   }
 
+  public RxFlux getRxFlux() {
+    return rxFlux;
+  }
+
   public GitHubActionCreator getGitHubActionCreator() {
     return gitHubActionCreator;
   }
 
-  public RepositoriesStore getRepositoriesStore() {
-    return repositoriesStore;
-  }
-
-  public UsersStore getUsersStore() {
-    return usersStore;
-  }
 }

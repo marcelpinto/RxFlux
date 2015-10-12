@@ -15,10 +15,16 @@ import java.util.ArrayList;
 public class RepositoriesStore extends RxStore implements RepositoriesStoreInterface {
 
   public static final String ID = "RepositoriesStore";
+  private static RepositoriesStore instance;
   private ArrayList<GitHubRepo> gitHubRepos;
 
-  public RepositoriesStore(Dispatcher dispatcher) {
+  private RepositoriesStore(Dispatcher dispatcher) {
     super(dispatcher);
+  }
+
+  public static synchronized RepositoriesStore get(Dispatcher dispatcher) {
+    if (instance == null) instance = new RepositoriesStore(dispatcher);
+    return instance;
   }
 
   @Override

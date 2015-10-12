@@ -52,6 +52,9 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
   @Override
   public void onActivityCreated(Activity activity, Bundle bundle) {
     activityCounter++;
+    if (activity instanceof RxStoreDispatch) {
+      ((RxStoreDispatch) activity).onRegister();
+    }
   }
 
   @Override

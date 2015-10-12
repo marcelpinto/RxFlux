@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
   @Bind(R.id.loading_frame) TextView loadingFrame;
   private RepoAdapter adapter;
+  private UsersStore usersStore;
+  private RepositoriesStore repositoriesStore;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity
       case RepositoriesStore.ID:
         switch (change.getRxAction().getType()) {
           case Actions.GET_PUBLIC_REPOS:
-            adapter.setRepos(SampleApp.get(this).getRepositoriesStore().getRepositories());
+            adapter.setRepos(repositoriesStore.getRepositories());
             break;
         }
         break;
@@ -80,6 +82,14 @@ public class MainActivity extends AppCompatActivity
             showUserDialog((String) change.getRxAction().getData().get(Keys.ID));
         }
     }
+  }
+
+  @Override
+  public void onRegister() {
+    repositoriesStore = RepositoriesStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
+    repositoriesStore.register();
+    usersStore = UsersStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
+    usersStore.register();
   }
 
   private void showUserDialog(String id) {
@@ -99,7 +109,7 @@ public class MainActivity extends AppCompatActivity
   @Override
   public void onClicked(GitHubRepo repo) {
     String login = repo.getOwner().getLogin();
-    if (SampleApp.get(this).getUsersStore().getUser(login) != null) {
+    if (usersStore.getUser(login) != null) {
       showUserDialog(login);
       return;
     }

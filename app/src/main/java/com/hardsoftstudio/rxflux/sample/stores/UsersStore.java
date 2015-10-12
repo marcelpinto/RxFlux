@@ -16,11 +16,17 @@ import java.util.ArrayList;
 public class UsersStore extends RxStore implements UsersStoreInterface {
 
   public static final String ID = "UsersStore";
+  private static UsersStore instance;
   private ArrayMap<String, GitUser> users;
 
-  public UsersStore(Dispatcher dispatcher) {
+  private UsersStore(Dispatcher dispatcher) {
     super(dispatcher);
     users = new ArrayMap<>();
+  }
+
+  public static synchronized UsersStore get(Dispatcher dispatcher) {
+    if (instance == null) instance = new UsersStore(dispatcher);
+    return instance;
   }
 
   /**

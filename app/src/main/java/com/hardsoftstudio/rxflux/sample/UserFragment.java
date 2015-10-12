@@ -9,6 +9,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.hardsoftstudio.rxflux.sample.model.GitUser;
+import com.hardsoftstudio.rxflux.sample.stores.UsersStore;
 
 public class UserFragment extends DialogFragment {
   private static final String ARG_USER_ID = "userId";
@@ -45,7 +46,8 @@ public class UserFragment extends DialogFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_user, container, false);
-    view.setOnClickListener(view1 -> {});
+    view.setOnClickListener(view1 -> {
+    });
     ButterKnife.bind(this, view);
     return view;
   }
@@ -53,7 +55,8 @@ public class UserFragment extends DialogFragment {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    GitUser user = SampleApp.get(getActivity()).getUsersStore().getUser(userId);
+    GitUser user = UsersStore.get(SampleApp.get(getActivity()).getRxFlux().getDispatcher())
+        .getUser(userId);
     userNameView.setText(user.getName());
     loginView.setText(user.getLogin());
     statsView.setText(getStats(user));
