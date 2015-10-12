@@ -5,3 +5,4 @@ It's still under development but you can already check the sample app. I am miss
 
 Meanwhile learn more about Flux for Android here https://github.com/lgvalle/android-flux-todo-app
 
+[Guideline](http://skimarxall.github.io/RxFlux)

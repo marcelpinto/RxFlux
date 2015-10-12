@@ -5,7 +5,7 @@ import android.app.Application;
 import android.os.Bundle;
 import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
 import com.hardsoftstudio.rxflux.dispatcher.RxBus;
-import com.hardsoftstudio.rxflux.dispatcher.RxStoreDispatch;
+import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
 import com.hardsoftstudio.rxflux.util.SubscriptionManager;
 
 /**
@@ -67,8 +67,8 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
   @Override
   public void onActivityCreated(Activity activity, Bundle bundle) {
     activityCounter++;
-    if (activity instanceof RxStoreDispatch) {
-      ((RxStoreDispatch) activity).onRegister();
+    if (activity instanceof RxViewDispatch) {
+      ((RxViewDispatch) activity).onRxStoresRegister();
     }
   }
 
@@ -79,15 +79,15 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
 
   @Override
   public void onActivityResumed(Activity activity) {
-    if (activity instanceof RxStoreDispatch) {
-      dispatcher.registerRxStore((RxStoreDispatch) activity);
+    if (activity instanceof RxViewDispatch) {
+      dispatcher.registerRxStore((RxViewDispatch) activity);
     }
   }
 
   @Override
   public void onActivityPaused(Activity activity) {
-    if (activity instanceof RxStoreDispatch) {
-      dispatcher.unregisterRxStore((RxStoreDispatch) activity);
+    if (activity instanceof RxViewDispatch) {
+      dispatcher.unregisterRxStore((RxViewDispatch) activity);
     }
   }
 

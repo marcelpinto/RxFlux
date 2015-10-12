@@ -8,9 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.hardsoftstudio.rxflux.dispatcher.RxStoreDispatch;
+import com.hardsoftstudio.rxflux.action.RxError;
+import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
 import com.hardsoftstudio.rxflux.sample.actions.Actions;
 import com.hardsoftstudio.rxflux.sample.actions.Keys;
 import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
@@ -21,7 +23,7 @@ import com.hardsoftstudio.rxflux.store.RxStoreChange;
 import static com.hardsoftstudio.rxflux.sample.SampleApp.get;
 
 public class MainActivity extends AppCompatActivity
-    implements RxStoreDispatch, RepoAdapter.OnRepoClicked {
+    implements RxViewDispatch, RepoAdapter.OnRepoClicked {
 
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
   @Bind(R.id.loading_frame) TextView loadingFrame;
@@ -85,7 +87,27 @@ public class MainActivity extends AppCompatActivity
   }
 
   @Override
-  public void onRegister() {
+  public void onRxError(RxError error) {
+    setLoadingFrame(false);
+    if (error.getThrowable() != null) {
+      Toast.makeText(this, "Error: " + error.getThrowable().getMessage(), Toast.LENGTH_LONG).show();
+    } else {
+      Toast.makeText(this, "Unknown error", Toast.LENGTH_LONG).show();
+    }
+  }
+
+  @Override
+  public void onRxViewRegistered() {
+    // If there is any fragment that needs to register store changes we can do it here
+  }
+
+  @Override
+  public void onRxViewUnRegistered() {
+    // If there is any fragment that has registered for store changes we can unregister now
+  }
+
+  @Override
+  public void onRxStoresRegister() {
     repositoriesStore = RepositoriesStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
     repositoriesStore.register();
     usersStore = UsersStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
