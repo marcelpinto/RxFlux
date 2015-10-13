@@ -7,7 +7,9 @@ In order to understand more how to use Flux pattern in Android [@lgvalle](https:
 
 Gradle:
 ```
-TODO when the first version is uploaded to maven update here the explanation.
+dependencies {
+  compile 'com.hardsoftstudio:rxflux:0.1.2'
+}
 ```
 
 IMPORTANT in order to follow the instructions is highly recommended to look at the example provided in the repo.
