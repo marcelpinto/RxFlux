@@ -1,1 +1,2 @@
 include ':app', ':rxflux'
+rootProject.name = 'RxFlux'

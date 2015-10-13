@@ -1,3 +1,5 @@
+/keystore.properties
+/keystore
 .gradle
 /local.properties
 /.idea/workspace.xml

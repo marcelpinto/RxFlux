@@ -88,11 +88,13 @@ The SubscriptionManager is an important class that handles subscriptions by tag,
 
 The RxActionCreator offer the following methods:
 
-```boolean hasRxAction(RxAction rxAction)``` Checks if there is already and action running.
-```void removeRxAction(RxAction rxAction)``` Remove the specific action if exists
-```RxAction newRxAction(@NonNull String actionId, @NonNull Object... data)``` Creates a new RxAction with the specific actionId and the data. This object must be a key-value pair i.e newRxAction(GET_USER, Keys.ID, userId);
-```postRxAction(RxAction action)``` Will send the action into the dispatcher
-```postError(RxAction action, Throwable throwable)``` Creates a new RxError instance that contains the RxAction created and the throwable instance then will post the error into the dispatcher so the store can react to it.
+* ```boolean hasRxAction(RxAction rxAction)``` Checks if there is already and action running.
+* ```void removeRxAction(RxAction rxAction)``` Remove the specific action if exists
+* ```RxAction newRxAction(@NonNull String actionId, @NonNull Object... data)``` Creates a new
+RxAction with the specific actionId and the data. This object must be a key-value pair i.e newRxAction(GET_USER, Keys.ID, userId);
+* ```postRxAction(RxAction action)``` Will send the action into the dispatcher
+* ```postError(RxAction action, Throwable throwable)``` Creates a new RxError instance that
+contains the RxAction created and the throwable instance then will post the error into the dispatcher so the store can react to it.
 
 ### RxAction
 

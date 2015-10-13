@@ -1,4 +1,10 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+// This is the library version used when deploying the artifact
+version = "0.1.2"
+group = "com.hardsoftstudio" // Maven Group ID for the artifact
 
 android {
   compileSdkVersion 23
@@ -7,13 +13,30 @@ android {
   defaultConfig {
     minSdkVersion 15
     targetSdkVersion 23
-    versionCode 1
-    versionName "1.0"
+    versionCode 3
+    versionName version
   }
+
+
+  signingConfigs {
+    release {
+      def Properties localProps = new Properties()
+      localProps.load(new FileInputStream(file('../local.properties')))
+      def Properties keyProps = new Properties()
+      assert localProps['keystore.props.file'];
+      keyProps.load(new FileInputStream(file(localProps['keystore.props.file'])))
+      storeFile file(keyProps["store"])
+      keyAlias keyProps["alias"]
+      storePassword keyProps["storePass"]
+      keyPassword keyProps["pass"]
+    }
+  }
+
   buildTypes {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.release
     }
   }
 }
@@ -26,4 +49,96 @@ dependencies {
 
   testCompile 'junit:junit:4.12'
   testCompile "org.mockito:mockito-core:1.10.17"
+}
+
+def siteUrl = 'https://github.com/skimarxall/RxFlux'
+// Homepage URL of the library
+def gitUrl = 'https://github.com/skimarxall/RxFlux.git'
+// Git repository URL
+
+install {
+  repositories.mavenInstaller {
+    // This generates POM.xml with proper parameters
+    pom {
+      project {
+        packaging 'aar'
+
+        // Add your description here
+        name 'RxFlux'
+        description =
+            'RxFlux is a small framework in order to follow Flux design pattern with RxJava functionalities'
+        url siteUrl
+
+        // Set your license
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+        developers {
+          developer {
+            id 'skimarxall'
+            name 'Marcel Pinto Biescas'
+            email 'skimarxall@gmail.com'
+          }
+        }
+        scm {
+          connection gitUrl
+          developerConnection gitUrl
+          url siteUrl
+        }
+      }
+    }
+  }
+}
+
+task sourcesJar(type: Jar) {
+  from android.sourceSets.main.java.srcDirs
+  classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+  source = android.sourceSets.main.java.srcDirs
+  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+artifacts {
+  archives javadocJar
+  archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+  user = properties.getProperty("bintray.user")
+  key = properties.getProperty("bintray.apikey")
+
+  configurations = ['archives']
+  pkg {
+    repo = "maven"
+    name = "RxFlux"
+    websiteUrl = siteUrl
+    vcsUrl = gitUrl
+    licenses = ["Apache-2.0"]
+    publish = true
+    version {
+      gpg {
+        sign = true //Determines whether to GPG sign the files. The default is false
+        passphrase = properties.getProperty("bintray.gpg.password")
+        //Optional. The passphrase for GPG signing'
+      }
+      mavenCentralSync {
+        sync = true
+        //Optional (true by default). Determines whether to sync the version to Maven Central.
+        user = properties.getProperty("bintray.oss.user") //OSS user token
+        password = properties.getProperty("bintray.oss.password") //OSS user password
+      }
+    }
+  }
 }
