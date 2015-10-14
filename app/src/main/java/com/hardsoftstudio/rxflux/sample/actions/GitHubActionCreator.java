@@ -1,6 +1,5 @@
 package com.hardsoftstudio.rxflux.sample.actions;
 
-import android.content.Context;
 import com.hardsoftstudio.rxflux.action.RxAction;
 import com.hardsoftstudio.rxflux.action.RxActionCreator;
 import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
@@ -17,15 +16,12 @@ import static com.hardsoftstudio.rxflux.sample.actions.Keys.USER;
  */
 public class GitHubActionCreator extends RxActionCreator implements Actions {
 
-  private final Context context;
-
   /**
    * If you want to give more things to the constructor like API or Preferences or any other
    * parameter you can buy make sure to call super(dispatcher, manager)
    */
-  public GitHubActionCreator(Context context, Dispatcher dispatcher, SubscriptionManager manager) {
+  public GitHubActionCreator(Dispatcher dispatcher, SubscriptionManager manager) {
     super(dispatcher, manager);
-    this.context = context;
   }
 
   @Override

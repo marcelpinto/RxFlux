@@ -12,6 +12,8 @@ dependencies {
 }
 ```
 
+RxFlux contains as dependency RxAndroid and the Android support v4 in order to get the benefits of classes like ArrayMap, Pair, etc...
+
 IMPORTANT in order to follow the instructions is highly recommended to look at the example provided in the repo.
 
 The main class is the RxFlux, is the responsible to handle activity lifecycle in order to notify and register stores and views. 

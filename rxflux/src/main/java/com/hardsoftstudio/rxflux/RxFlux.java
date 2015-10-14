@@ -22,16 +22,17 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
   private final SubscriptionManager subscriptionManager;
   private int activityCounter;
 
-  private RxFlux() {
+  private RxFlux(Application application) {
     this.rxBus = RxBus.getInstance();
     this.dispatcher = Dispatcher.getInstance(rxBus);
     this.subscriptionManager = SubscriptionManager.getInstance();
     activityCounter = 0;
+    application.registerActivityLifecycleCallbacks(this);
   }
 
-  public static RxFlux init() {
+  public static RxFlux init(Application application) {
     if (instance != null) throw new IllegalStateException("Init was already called");
-    return instance = new RxFlux();
+    return instance = new RxFlux(application);
   }
 
   public static void shutdown() {

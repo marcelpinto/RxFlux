@@ -21,12 +21,9 @@ public class SampleApp extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
-
-    rxFlux = RxFlux.init();
-    gitHubActionCreator = new GitHubActionCreator(this, rxFlux.getDispatcher(),
+    rxFlux = RxFlux.init(this);
+    gitHubActionCreator = new GitHubActionCreator(rxFlux.getDispatcher(),
         rxFlux.getSubscriptionManager());
-
-    registerActivityLifecycleCallbacks(rxFlux);
   }
 
   public static SampleApp get(Context context) {
