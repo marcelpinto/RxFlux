@@ -26,7 +26,7 @@ public final class SubscriptionManager {
    * Given an action and a subscription, add the new subscription and unsubscribe if there
    * was an existing one.
    * @param action
-   * @param subscriptio
+   * @param subscription
    */
   public void add(RxAction action, Subscription subscription) {
     Pair<Integer, Subscription> old = mMap.put(action.getType(), getPair(action, subscription));
