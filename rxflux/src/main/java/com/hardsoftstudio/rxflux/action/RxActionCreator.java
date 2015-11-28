@@ -6,7 +6,7 @@ import com.hardsoftstudio.rxflux.util.SubscriptionManager;
 import rx.Subscription;
 
 /**
- * Created by marcel on 10/09/15.
+ * This class must be extended in order to give useful functionality to create RxAction.
  */
 public abstract class RxActionCreator {
 
@@ -53,7 +53,7 @@ public abstract class RxActionCreator {
     dispatcher.postRxAction(action);
   }
 
-  public void postError(RxAction action, Throwable throwable) {
+  public void postError(@NonNull RxAction action, Throwable throwable) {
     dispatcher.postRxAction(RxError.newRxError(action, throwable));
   }
 

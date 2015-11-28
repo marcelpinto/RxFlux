@@ -1,30 +1,37 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
+    android:id="@+id/root_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_light_background"
+    android:background="#e0e0e0"
     tools:context=".MainActivity"
     >
-
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/recycler_view"
-      android:padding="20dp"
-      android:clipToPadding="false"
+  <RelativeLayout
+      android:id="@+id/root"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      />
+      >
 
-  <TextView
-      android:id="@+id/loading_frame"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="15dp"
-      android:background="#a0000000"
-      android:textColor="@android:color/white"
-      android:visibility="gone"
-      android:text="Loading, please wait..."
-      tools:visibility="visible"
-      />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:padding="20dp"
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/loading_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:background="#a0000000"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        android:text="Loading, please wait..."
+        tools:visibility="visible"
+        />
+
+  </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

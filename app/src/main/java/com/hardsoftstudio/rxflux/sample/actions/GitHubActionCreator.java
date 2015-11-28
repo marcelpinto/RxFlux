@@ -8,11 +8,12 @@ import com.hardsoftstudio.rxflux.util.SubscriptionManager;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.hardsoftstudio.rxflux.sample.actions.Keys.ID;
 import static com.hardsoftstudio.rxflux.sample.actions.Keys.PUBLIC_REPOS;
 import static com.hardsoftstudio.rxflux.sample.actions.Keys.USER;
 
 /**
- * Created by marcel on 11/09/15.
+ * Action Creator responsible of creating the needed actions
  */
 public class GitHubActionCreator extends RxActionCreator implements Actions {
 
@@ -50,5 +51,20 @@ public class GitHubActionCreator extends RxActionCreator implements Actions {
           action.getData().put(USER, user);
           postRxAction(action);
         }, throwable -> postError(action, throwable)));
+  }
+
+  @Override
+  public boolean retry(RxAction action) {
+    if (hasRxAction(action)) return true;
+
+    switch (action.getType()) {
+      case GET_USER:
+        getUserDetails(action.get(ID));
+        return true;
+      case GET_PUBLIC_REPOS:
+        getPublicRepositories();
+        return true;
+    }
+    return false;
   }
 }

@@ -1,10 +1,12 @@
 package com.hardsoftstudio.rxflux.store;
 
+import com.hardsoftstudio.rxflux.action.RxActionCreator;
 import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
 import com.hardsoftstudio.rxflux.dispatcher.RxActionDispatch;
 
 /**
- * Created by marcel on 10/09/15.
+ * This class must be extended by each store of the app in order to recieve the actions dispatched
+ * by the {@link RxActionCreator}
  */
 public abstract class RxStore implements RxActionDispatch {
 

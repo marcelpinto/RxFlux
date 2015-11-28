@@ -1,6 +1,8 @@
 package com.hardsoftstudio.rxflux.sample;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,8 +27,10 @@ import static com.hardsoftstudio.rxflux.sample.SampleApp.get;
 public class MainActivity extends AppCompatActivity
     implements RxViewDispatch, RepoAdapter.OnRepoClicked {
 
+  private static final String TAG = "MainActivity";
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
   @Bind(R.id.loading_frame) TextView loadingFrame;
+  @Bind(R.id.root_coordinator) CoordinatorLayout coordinatorLayout;
   private RepoAdapter adapter;
   private UsersStore usersStore;
   private RepositoriesStore repositoriesStore;
@@ -89,8 +93,12 @@ public class MainActivity extends AppCompatActivity
   @Override
   public void onRxError(RxError error) {
     setLoadingFrame(false);
-    if (error.getThrowable() != null) {
-      Toast.makeText(this, "Error: " + error.getThrowable().getMessage(), Toast.LENGTH_LONG).show();
+    Throwable throwable = error.getThrowable();
+    if (throwable != null) {
+      Snackbar.make(coordinatorLayout, "An error ocurred", Snackbar.LENGTH_INDEFINITE)
+          .setAction("Retry",
+              v -> SampleApp.get(this).getGitHubActionCreator().retry(error.getAction()))
+          .show();
     } else {
       Toast.makeText(this, "Unknown error", Toast.LENGTH_LONG).show();
     }

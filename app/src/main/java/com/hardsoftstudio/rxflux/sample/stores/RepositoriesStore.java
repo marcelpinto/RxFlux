@@ -31,7 +31,7 @@ public class RepositoriesStore extends RxStore implements RepositoriesStoreInter
   public void onRxAction(RxAction action) {
     switch (action.getType()) {
       case Actions.GET_PUBLIC_REPOS:
-        this.gitHubRepos = (ArrayList<GitHubRepo>) action.getData().get(Keys.PUBLIC_REPOS);
+        this.gitHubRepos = action.get(Keys.PUBLIC_REPOS);
         break;
       default: // IMPORTANT if we don't modify the store just ignore
         return;

@@ -3,7 +3,7 @@ package com.hardsoftstudio.rxflux.action;
 import android.support.v4.util.ArrayMap;
 
 /**
- * Created by marcel on 13/08/15.
+ * Object class that hold the type of action and the data we want to attach to it
  */
 public class RxAction {
   private final String type;
@@ -24,6 +24,11 @@ public class RxAction {
 
   public ArrayMap<String, Object> getData() {
     return data;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T> T get(String tag) {
+    return (T) data.get(tag);
   }
 
   @Override

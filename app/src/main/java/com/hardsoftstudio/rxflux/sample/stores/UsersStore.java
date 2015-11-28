@@ -40,7 +40,7 @@ public class UsersStore extends RxStore implements UsersStoreInterface {
   public void onRxAction(RxAction action) {
     switch (action.getType()) {
       case Actions.GET_USER:
-        GitUser user = (GitUser) action.getData().get(Keys.USER);
+        GitUser user = action.get(Keys.USER);
         users.put(user.getLogin(), user);
         break;
       default: // IMPORTANT if we don't modify the store just ignore

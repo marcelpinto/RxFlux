@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 
 /**
- * Created by marcel on 12/10/15.
  * Special RxAction used for Errors, use the RxError.newRxError(action, throwable) to create a
  * new instance
  */

@@ -6,7 +6,7 @@ import com.hardsoftstudio.rxflux.action.RxAction;
 import rx.Subscription;
 
 /**
- * Created by marcel on 13/08/15.
+ * Utility class to handle subscriptions
  */
 public final class SubscriptionManager {
 
@@ -33,6 +33,10 @@ public final class SubscriptionManager {
     if (old != null && !old.second.isUnsubscribed()) old.second.unsubscribe();
   }
 
+  /**
+   * Remove an rxAction and unsubscribe from it
+   * @param action
+   */
   public void remove(RxAction action) {
     Pair<Integer, Subscription> old = mMap.remove(action.getType());
     if (old != null && !old.second.isUnsubscribed()) old.second.unsubscribe();
@@ -48,6 +52,9 @@ public final class SubscriptionManager {
     return (old != null && old.first == action.hashCode() && !old.second.isUnsubscribed());
   }
 
+  /**
+   * Clear all the subscriptions
+   */
   public synchronized void clear() {
     if (mMap.isEmpty()) return;
 

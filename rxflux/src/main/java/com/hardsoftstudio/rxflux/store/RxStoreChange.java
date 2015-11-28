@@ -3,7 +3,7 @@ package com.hardsoftstudio.rxflux.store;
 import com.hardsoftstudio.rxflux.action.RxAction;
 
 /**
- * Created by marcel on 10/09/15.
+ * Pos a new event to notify that the store has changed
  */
 public class RxStoreChange {
 

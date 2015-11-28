@@ -6,13 +6,12 @@ import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
 
 /**
- * Created by marcel on 10/09/15.
+ * Rx version of an EventBus
  */
 public class RxBus {
 
   private static RxBus instance;
-  // If multiple threads are going to emit events to this
-  // then it must be made thread-safe like this instead
+
   private final Subject<Object, Object> bus = new SerializedSubject<>(PublishSubject.create());
 
   private RxBus() {
