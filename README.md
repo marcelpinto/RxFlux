@@ -8,7 +8,7 @@ In order to understand more how to use Flux pattern in Android [@lgvalle](https:
 Gradle:
 ```
 dependencies {
-  compile 'com.hardsoftstudio:rxflux:0.1.2'
+  compile 'com.hardsoftstudio:rxflux:0.2.1'
 }
 ```
 
@@ -130,7 +130,7 @@ public class RepositoriesStore extends RxStore implements RepositoriesStoreInter
   public void onRxAction(RxAction action) {
     switch (action.getType()) {
       case Actions.GET_PUBLIC_REPOS:
-        this.gitHubRepos = (ArrayList<GitHubRepo>) action.getData().get(Keys.PUBLIC_REPOS);
+        this.gitHubRepos = (ArrayList<GitHubRepo>) action.get(Keys.PUBLIC_REPOS);
         break;
       default: // IMPORTANT if we don't modify the store just ignore
         return;
