@@ -8,7 +8,7 @@ RxFlux just provide an easy way to implement Flux pattern, it requires manual in
 **Pros:**
 * Clean architecture.
 * Simple flow.
-* Logic abstraction and well defined.
+* Logic abstraction
 * Simple to test.
 * Modular.
 * Reactive.
