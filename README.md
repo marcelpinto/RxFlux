@@ -24,6 +24,8 @@ For more information please read my arctile at medium. [Why RxFlux?](https://med
 
 RxFlux is a framework, that means that requires some work, is not just a library. Please follow the wiki to integrate RxFlux in your next project. [RxFlux Wiki](https://github.com/skimarxall/RxFlux/wiki)
 
+For a real case example read my post at medium [RxFlux Android Architecture](https://medium.com/swlh/rxflux-android-architecture-94f77c857aa2#.u0bwu76i9)
+
 ## Gradle:
 ```
 dependencies {
