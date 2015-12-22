@@ -1,4 +1,4 @@
-package com.hardsoftstudio.rxflux.sample;
+package com.hardsoftstudio.rxflux.sample.ui.mainactivity;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -15,6 +15,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.hardsoftstudio.rxflux.action.RxError;
 import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
+import com.hardsoftstudio.rxflux.sample.R;
+import com.hardsoftstudio.rxflux.sample.SampleApp;
+import com.hardsoftstudio.rxflux.sample.ui.userfragment.UserFragment;
 import com.hardsoftstudio.rxflux.sample.actions.Actions;
 import com.hardsoftstudio.rxflux.sample.actions.Keys;
 import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
@@ -24,8 +27,7 @@ import com.hardsoftstudio.rxflux.store.RxStoreChange;
 
 import static com.hardsoftstudio.rxflux.sample.SampleApp.get;
 
-public class MainActivity extends AppCompatActivity
-    implements RxViewDispatch, RepoAdapter.OnRepoClicked {
+public class MainActivity extends AppCompatActivity implements RxViewDispatch, RepoAdapter.OnRepoClicked {
 
   private static final String TAG = "MainActivity";
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
@@ -35,8 +37,7 @@ public class MainActivity extends AppCompatActivity
   private UsersStore usersStore;
   private RepositoriesStore repositoriesStore;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
@@ -48,14 +49,12 @@ public class MainActivity extends AppCompatActivity
     recyclerView.setAdapter(adapter);
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
     if (id == R.id.action_refresh) {
       refresh();
@@ -64,14 +63,12 @@ public class MainActivity extends AppCompatActivity
     return super.onOptionsItemSelected(item);
   }
 
-  @Override
-  protected void onResume() {
+  @Override protected void onResume() {
     super.onResume();
     refresh();
   }
 
-  @Override
-  public void onRxStoreChanged(RxStoreChange change) {
+  @Override public void onRxStoreChanged(RxStoreChange change) {
     setLoadingFrame(false);
 
     switch (change.getStoreId()) {
@@ -85,46 +82,40 @@ public class MainActivity extends AppCompatActivity
       case UsersStore.ID:
         switch (change.getRxAction().getType()) {
           case Actions.GET_USER:
-            showUserDialog((String) change.getRxAction().getData().get(Keys.ID));
+            showUserFragment((String) change.getRxAction().getData().get(Keys.ID));
         }
     }
   }
 
-  @Override
-  public void onRxError(RxError error) {
+  @Override public void onRxError(RxError error) {
     setLoadingFrame(false);
     Throwable throwable = error.getThrowable();
     if (throwable != null) {
-      Snackbar.make(coordinatorLayout, "An error ocurred", Snackbar.LENGTH_INDEFINITE)
-          .setAction("Retry",
-              v -> SampleApp.get(this).getGitHubActionCreator().retry(error.getAction()))
-          .show();
+      Snackbar.make(coordinatorLayout, "An error ocurred", Snackbar.LENGTH_INDEFINITE).setAction("Retry", v -> SampleApp.get(this).getGitHubActionCreator().retry(error.getAction())).show();
     } else {
       Toast.makeText(this, "Unknown error", Toast.LENGTH_LONG).show();
     }
   }
 
-  @Override
-  public void onRxViewRegistered() {
+  @Override public void onRxViewRegistered() {
     // If there is any fragment that needs to register store changes we can do it here
   }
 
-  @Override
-  public void onRxViewUnRegistered() {
+  @Override public void onRxViewUnRegistered() {
     // If there is any fragment that has registered for store changes we can unregister now
   }
 
-  @Override
-  public void onRxStoresRegister() {
+  @Override public void onRxStoresRegister() {
     repositoriesStore = RepositoriesStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
     repositoriesStore.register();
     usersStore = UsersStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
     usersStore.register();
   }
 
-  private void showUserDialog(String id) {
-    UserFragment dialog = UserFragment.newInstance(id);
-    dialog.show(getSupportFragmentManager(), UserFragment.class.getName());
+  private void showUserFragment(String id) {
+
+    UserFragment user_fragment = UserFragment.newInstance(id);
+    getFragmentManager().beginTransaction().replace(R.id.root, user_fragment).addToBackStack(null).commit();
   }
 
   private void setLoadingFrame(boolean show) {
@@ -136,14 +127,22 @@ public class MainActivity extends AppCompatActivity
     get(this).getGitHubActionCreator().getPublicRepositories();
   }
 
-  @Override
-  public void onClicked(GitHubRepo repo) {
+  @Override public void onClicked(GitHubRepo repo) {
     String login = repo.getOwner().getLogin();
     if (usersStore.getUser(login) != null) {
-      showUserDialog(login);
+      showUserFragment(login);
       return;
     }
     setLoadingFrame(true);
     SampleApp.get(this).getGitHubActionCreator().getUserDetails(login);
+  }
+
+  @Override public void onBackPressed() {
+    int count = getFragmentManager().getBackStackEntryCount();
+    if (count == 0) {
+      super.onBackPressed();
+    } else {
+      getFragmentManager().popBackStack();
+    }
   }
 }
