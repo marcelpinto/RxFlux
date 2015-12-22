@@ -1,4 +1,4 @@
-package com.hardsoftstudio.rxflux.sample;
+package com.hardsoftstudio.rxflux.sample.ui.mainactivity;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.hardsoftstudio.rxflux.sample.R;
 import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
 import java.util.ArrayList;
 
