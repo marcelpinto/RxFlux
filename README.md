@@ -29,7 +29,7 @@ For a real case example read my post at medium [RxFlux Android Architecture](htt
 ## Gradle:
 ```
 dependencies {
-  compile 'com.hardsoftstudio:rxflux:0.2.1'
+  compile 'com.hardsoftstudio:rxflux:0.3.1'
 }
 ```
 
