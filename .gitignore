@@ -1,12 +1,12 @@
-/keystore.properties
-/keystore
+keystore.properties
+keystore
 .gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
+local.properties
+.idea/workspace.xml
+.idea/libraries
 .DS_Store
-/build
-/captures
+build
+captures
 
 ### Java template
 *.class
@@ -97,3 +97,6 @@ proguard/
 .navigation/
 
 app/app.iml
+.idea/gradle.xml
+.idea/gradle.xml
+rxflux/rxflux.iml
