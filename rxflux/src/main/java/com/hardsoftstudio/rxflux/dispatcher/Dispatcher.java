@@ -4,6 +4,8 @@ import android.support.v4.util.ArrayMap;
 import com.hardsoftstudio.rxflux.action.RxAction;
 import com.hardsoftstudio.rxflux.action.RxError;
 import com.hardsoftstudio.rxflux.store.RxStoreChange;
+import com.hardsoftstudio.rxflux.util.LoggerManager;
+
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -17,6 +19,7 @@ public class Dispatcher {
 
   private static Dispatcher instance;
   private final RxBus bus;
+  private final LoggerManager logger;
   private ArrayMap<String, Subscription> rxActionMap;
   private ArrayMap<String, Subscription> rxStoreMap;
 
@@ -24,6 +27,7 @@ public class Dispatcher {
     this.bus = bus;
     this.rxActionMap = new ArrayMap<>();
     this.rxStoreMap = new ArrayMap<>();
+    this.logger = new LoggerManager();
   }
 
   public static synchronized Dispatcher getInstance(RxBus rxBus) {
@@ -32,9 +36,10 @@ public class Dispatcher {
   }
 
   public <T extends RxActionDispatch> void registerRxAction(final T object) {
-    String tag = object.getClass().getSimpleName();
+    final String tag = object.getClass().getSimpleName();
     Subscription subscription = rxActionMap.get(tag);
     if (subscription == null || subscription.isUnsubscribed()) {
+      logger.logRxStoreRegister(tag);
       rxActionMap.put(tag, bus.get().filter(new Func1<Object, Boolean>() {
         @Override
         public Boolean call(Object o) {
@@ -43,6 +48,7 @@ public class Dispatcher {
       }).subscribe(new Action1<Object>() {
         @Override
         public void call(Object o) {
+          logger.logRxAction(tag, (RxAction) o);
           object.onRxAction((RxAction) o);
         }
       }));
@@ -50,7 +56,7 @@ public class Dispatcher {
   }
 
   public <T extends RxViewDispatch> void registerRxError(final T object) {
-    String tag = object.getClass().getSimpleName() + "_error";
+    final String tag = object.getClass().getSimpleName() + "_error";
     Subscription subscription = rxActionMap.get(tag);
     if (subscription == null || subscription.isUnsubscribed()) {
       rxActionMap.put(tag, bus.get().filter(new Func1<Object, Boolean>() {
@@ -61,6 +67,7 @@ public class Dispatcher {
       }).subscribe(new Action1<Object>() {
         @Override
         public void call(Object o) {
+          logger.logRxError(tag, (RxError) o);
           object.onRxError((RxError) o);
         }
       }));
@@ -68,9 +75,10 @@ public class Dispatcher {
   }
 
   public <T extends RxViewDispatch> void registerRxStore(final T object) {
-    String tag = object.getClass().getSimpleName();
+    final String tag = object.getClass().getSimpleName();
     Subscription subscription = rxStoreMap.get(tag);
     if (subscription == null || subscription.isUnsubscribed()) {
+      logger.logViewRegisterToStore(tag);
       rxStoreMap.put(tag, bus.get().filter(new Func1<Object, Boolean>() {
         @Override
         public Boolean call(Object o) {
@@ -79,6 +87,7 @@ public class Dispatcher {
       }).subscribe(new Action1<Object>() {
         @Override
         public void call(Object o) {
+          logger.logRxStore(tag, (RxStoreChange) o);
           object.onRxStoreChanged((RxStoreChange) o);
         }
       }));
@@ -92,6 +101,7 @@ public class Dispatcher {
     if (subscription != null && !subscription.isUnsubscribed()) {
       subscription.unsubscribe();
       rxActionMap.remove(tag);
+      logger.logUnregisterRxAction(tag);
     }
   }
 
@@ -110,6 +120,7 @@ public class Dispatcher {
     if (subscription != null && !subscription.isUnsubscribed()) {
       subscription.unsubscribe();
       rxStoreMap.remove(tag);
+      logger.logUnregisterRxStore(tag);
     }
     unregisterRxError(object);
   }

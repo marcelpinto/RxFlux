@@ -3,9 +3,11 @@ package com.hardsoftstudio.rxflux;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+
 import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
 import com.hardsoftstudio.rxflux.dispatcher.RxBus;
 import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
+import com.hardsoftstudio.rxflux.util.LogLevel;
 import com.hardsoftstudio.rxflux.util.SubscriptionManager;
 
 /**
@@ -15,6 +17,9 @@ import com.hardsoftstudio.rxflux.util.SubscriptionManager;
  * unregister all the remaining subscriptions for each activity.
  */
 public class RxFlux implements Application.ActivityLifecycleCallbacks {
+
+  public static String TAG = "RxFlux";
+  public static LogLevel LOG_LEVEL = LogLevel.NONE;
 
   private static RxFlux instance;
   private final RxBus rxBus;

@@ -49,6 +49,14 @@ public class RxAction {
     return result;
   }
 
+  @Override
+  public String toString() {
+    return "RxAction{" +
+            "type='" + type + '\'' +
+            ", data=" + data +
+            '}';
+  }
+
   public static class Builder {
 
     private String type;
