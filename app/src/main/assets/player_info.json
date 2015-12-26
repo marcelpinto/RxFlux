@@ -1,9 +1,8 @@
-
-  {
-    "id": "1234",
-    "name": "Marcel Pinto",
-    "score": 100,
-    "ranking":10,
-    "gender":"male",
-    "description:":"Nice guy"
-  }
+{
+  "id": "1234",
+  "name": "Marcel Pinto",
+  "score": 100,
+  "ranking": 10,
+  "gender": "male",
+  "description:": "Nice guy"
+}

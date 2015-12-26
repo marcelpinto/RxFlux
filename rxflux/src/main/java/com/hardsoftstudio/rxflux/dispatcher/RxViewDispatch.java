@@ -12,7 +12,6 @@ public interface RxViewDispatch {
 
   /**
    * All the stores will call this event so the view can react and request the needed data
-   * @param change
    */
   void onRxStoreChanged(RxStoreChange change);
 

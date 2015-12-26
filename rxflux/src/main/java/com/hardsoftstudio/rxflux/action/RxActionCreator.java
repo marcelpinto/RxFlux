@@ -56,5 +56,4 @@ public abstract class RxActionCreator {
   public void postError(@NonNull RxAction action, Throwable throwable) {
     dispatcher.postRxAction(RxError.newRxError(action, throwable));
   }
-
 }

@@ -9,5 +9,4 @@ import java.util.ArrayList;
 public interface RepositoriesStoreInterface {
 
   ArrayList<GitHubRepo> getRepositories();
-
 }

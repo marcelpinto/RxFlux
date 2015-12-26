@@ -26,13 +26,11 @@ public class RxAction {
     return data;
   }
 
-  @SuppressWarnings("unchecked")
-  public <T> T get(String tag) {
+  @SuppressWarnings("unchecked") public <T> T get(String tag) {
     return (T) data.get(tag);
   }
 
-  @Override
-  public boolean equals(Object o) {
+  @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof RxAction)) return false;
 
@@ -42,11 +40,17 @@ public class RxAction {
     return !(data != null ? !data.equals(rxAction.data) : rxAction.data != null);
   }
 
-  @Override
-  public int hashCode() {
+  @Override public int hashCode() {
     int result = type.hashCode();
     result = 31 * result + (data != null ? data.hashCode() : 0);
     return result;
+  }
+
+  @Override public String toString() {
+    return "RxAction{" +
+        "type='" + type + '\'' +
+        ", data=" + data +
+        '}';
   }
 
   public static class Builder {

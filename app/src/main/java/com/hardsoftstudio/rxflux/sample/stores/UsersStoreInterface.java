@@ -11,5 +11,4 @@ public interface UsersStoreInterface {
   GitUser getUser(String id);
 
   ArrayList<GitUser> getUsers();
-
 }

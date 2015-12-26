@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
 import com.hardsoftstudio.rxflux.dispatcher.RxBus;
 import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
+import com.hardsoftstudio.rxflux.util.LogLevel;
 import com.hardsoftstudio.rxflux.util.SubscriptionManager;
 
 /**
@@ -15,6 +16,9 @@ import com.hardsoftstudio.rxflux.util.SubscriptionManager;
  * unregister all the remaining subscriptions for each activity.
  */
 public class RxFlux implements Application.ActivityLifecycleCallbacks {
+
+  public static String TAG = "RxFlux";
+  public static LogLevel LOG_LEVEL = LogLevel.NONE;
 
   private static RxFlux instance;
   private final RxBus rxBus;
@@ -42,7 +46,6 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
   }
 
   /**
-   *
    * @return the instance of the RxBus in case you want to reused for something else
    */
   public RxBus getRxBus() {
@@ -50,7 +53,6 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
   }
 
   /**
-   *
    * @return the instance of the dispatcher
    */
   public Dispatcher getDispatcher() {
@@ -58,52 +60,44 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
   }
 
   /**
-   *
    * @return the instance of the subscription manager in case you want to reuse for something else
    */
   public SubscriptionManager getSubscriptionManager() {
     return subscriptionManager;
   }
 
-  @Override
-  public void onActivityCreated(Activity activity, Bundle bundle) {
+  @Override public void onActivityCreated(Activity activity, Bundle bundle) {
     activityCounter++;
     if (activity instanceof RxViewDispatch) {
       ((RxViewDispatch) activity).onRxStoresRegister();
     }
   }
 
-  @Override
-  public void onActivityStarted(Activity activity) {
+  @Override public void onActivityStarted(Activity activity) {
 
   }
 
-  @Override
-  public void onActivityResumed(Activity activity) {
+  @Override public void onActivityResumed(Activity activity) {
     if (activity instanceof RxViewDispatch) {
       dispatcher.registerRxStore((RxViewDispatch) activity);
     }
   }
 
-  @Override
-  public void onActivityPaused(Activity activity) {
+  @Override public void onActivityPaused(Activity activity) {
     if (activity instanceof RxViewDispatch) {
       dispatcher.unregisterRxStore((RxViewDispatch) activity);
     }
   }
 
-  @Override
-  public void onActivityStopped(Activity activity) {
+  @Override public void onActivityStopped(Activity activity) {
 
   }
 
-  @Override
-  public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+  @Override public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
 
   }
 
-  @Override
-  public void onActivityDestroyed(Activity activity) {
+  @Override public void onActivityDestroyed(Activity activity) {
     activityCounter--;
 
     if (activityCounter == 0) {

@@ -146,8 +146,7 @@ public class GitUser {
     return updatedAt;
   }
 
-  @Override
-  public String toString() {
+  @Override public String toString() {
     final StringBuffer sb = new StringBuffer("GitUser{");
     sb.append("login='").append(login).append('\'');
     sb.append(", id=").append(id);

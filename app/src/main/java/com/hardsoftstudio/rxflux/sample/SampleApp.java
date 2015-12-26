@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.hardsoftstudio.rxflux.RxFlux;
 import com.hardsoftstudio.rxflux.sample.actions.GitHubActionCreator;
+import com.hardsoftstudio.rxflux.util.LogLevel;
 
 /**
  * Created by marcel on 10/09/15.
@@ -18,16 +19,16 @@ public class SampleApp extends Application {
    */
   private GitHubActionCreator gitHubActionCreator;
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    rxFlux = RxFlux.init(this);
-    gitHubActionCreator = new GitHubActionCreator(rxFlux.getDispatcher(),
-        rxFlux.getSubscriptionManager());
-  }
-
   public static SampleApp get(Context context) {
     return ((SampleApp) context.getApplicationContext());
+  }
+
+  @Override public void onCreate() {
+    super.onCreate();
+    RxFlux.LOG_LEVEL = BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE;
+    rxFlux = RxFlux.init(this);
+    gitHubActionCreator =
+        new GitHubActionCreator(rxFlux.getDispatcher(), rxFlux.getSubscriptionManager());
   }
 
   public RxFlux getRxFlux() {
@@ -37,5 +38,4 @@ public class SampleApp extends Application {
   public GitHubActionCreator getGitHubActionCreator() {
     return gitHubActionCreator;
   }
-
 }

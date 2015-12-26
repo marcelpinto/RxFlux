@@ -34,10 +34,8 @@ public class UsersStore extends RxStore implements UsersStoreInterface {
    * some logic with the model, for example add it to the list to cache it, modify
    * fields etc.. all the logic for the models should go here and then call postChange so the
    * view request the new data
-   * @param action
    */
-  @Override
-  public void onRxAction(RxAction action) {
+  @Override public void onRxAction(RxAction action) {
     switch (action.getType()) {
       case Actions.GET_USER:
         GitUser user = action.get(Keys.USER);
@@ -49,13 +47,11 @@ public class UsersStore extends RxStore implements UsersStoreInterface {
     postChange(new RxStoreChange(ID, action));
   }
 
-  @Override
-  public GitUser getUser(String id) {
+  @Override public GitUser getUser(String id) {
     return users.get(id);
   }
 
-  @Override
-  public ArrayList<GitUser> getUsers() {
+  @Override public ArrayList<GitUser> getUsers() {
     // TODO Make this store contains a list of users so every time we fetch a user we added to
     // the list, so we don't need to request it again
     return new ArrayList<>();

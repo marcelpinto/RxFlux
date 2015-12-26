@@ -15,11 +15,14 @@ import com.hardsoftstudio.rxflux.sample.stores.UsersStore;
 
 public class UserFragment extends Fragment {
   private static final String ARG_USER_ID = "userId";
-  private String userId;
-
   @Bind(R.id.user_name) TextView userNameView;
   @Bind(R.id.login) TextView loginView;
   @Bind(R.id.statistics) TextView statsView;
+  private String userId;
+
+  public UserFragment() {
+    // Required empty public constructor
+  }
 
   public static UserFragment newInstance(String userId) {
     UserFragment fragment = new UserFragment();
