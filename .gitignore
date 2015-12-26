@@ -100,3 +100,6 @@ app/app.iml
 .idea/gradle.xml
 .idea/gradle.xml
 rxflux/rxflux.iml
+app/app.iml
+*.iml
+*.iml
