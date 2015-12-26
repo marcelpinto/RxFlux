@@ -35,7 +35,7 @@ dependencies {
 
 
 ## Author
-This framework was developed by @skimarxall. It is being used in a private production environment. The idea of this framework came after reading the article of @lgvalle. 
+This framework was developed by @skimarxall. It is being used in a private production environment. The idea of this framework came after reading the [article](http://lgvalle.xyz/2015/08/04/flux-architecture/) of [@lgvalle](https://github.com/lgvalle). 
 
 The contributions are totally welcome, but all the PR must follow the coding rules defined [here](https://github.com/square/java-code-styles/blob/master/configs/codestyles/SquareAndroid.xml).
 
