@@ -4,7 +4,6 @@ import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
 import com.hardsoftstudio.rxflux.sample.model.GitUser;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-
 import java.util.ArrayList;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
