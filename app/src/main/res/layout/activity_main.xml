@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:background="#e0e0e0"
     tools:context=".MainActivity"
-    >
+>
   <RelativeLayout
       android:id="@+id/root"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      >
+  >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -19,7 +19,7 @@
         android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+    />
 
     <TextView
         android:id="@+id/loading_frame"
@@ -31,7 +31,7 @@
         android:visibility="gone"
         android:text="Loading, please wait..."
         tools:visibility="visible"
-        />
+    />
 
   </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

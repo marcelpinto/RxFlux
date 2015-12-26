@@ -25,8 +25,7 @@ public class GitHubActionCreator extends RxActionCreator implements Actions {
     super(dispatcher, manager);
   }
 
-  @Override
-  public void getPublicRepositories() {
+  @Override public void getPublicRepositories() {
     final RxAction action = newRxAction(GET_PUBLIC_REPOS);
     if (hasRxAction(action)) return;
 
@@ -38,8 +37,7 @@ public class GitHubActionCreator extends RxActionCreator implements Actions {
             throwable -> postError(action, throwable)));
   }
 
-  @Override
-  public void getUserDetails(String userId) {
+  @Override public void getUserDetails(String userId) {
     final RxAction action = newRxAction(GET_USER, Keys.ID, userId);
     if (hasRxAction(action)) return;
 
@@ -53,8 +51,7 @@ public class GitHubActionCreator extends RxActionCreator implements Actions {
         }, throwable -> postError(action, throwable)));
   }
 
-  @Override
-  public boolean retry(RxAction action) {
+  @Override public boolean retry(RxAction action) {
     if (hasRxAction(action)) return true;
 
     switch (action.getType()) {

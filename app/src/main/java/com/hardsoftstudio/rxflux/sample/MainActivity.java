@@ -35,8 +35,7 @@ public class MainActivity extends AppCompatActivity
   private UsersStore usersStore;
   private RepositoriesStore repositoriesStore;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
@@ -48,14 +47,12 @@ public class MainActivity extends AppCompatActivity
     recyclerView.setAdapter(adapter);
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
     if (id == R.id.action_refresh) {
       refresh();
@@ -64,14 +61,12 @@ public class MainActivity extends AppCompatActivity
     return super.onOptionsItemSelected(item);
   }
 
-  @Override
-  protected void onResume() {
+  @Override protected void onResume() {
     super.onResume();
     refresh();
   }
 
-  @Override
-  public void onRxStoreChanged(RxStoreChange change) {
+  @Override public void onRxStoreChanged(RxStoreChange change) {
     setLoadingFrame(false);
 
     switch (change.getStoreId()) {
@@ -90,8 +85,7 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-  @Override
-  public void onRxError(RxError error) {
+  @Override public void onRxError(RxError error) {
     setLoadingFrame(false);
     Throwable throwable = error.getThrowable();
     if (throwable != null) {
@@ -104,18 +98,15 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-  @Override
-  public void onRxViewRegistered() {
+  @Override public void onRxViewRegistered() {
     // If there is any fragment that needs to register store changes we can do it here
   }
 
-  @Override
-  public void onRxViewUnRegistered() {
+  @Override public void onRxViewUnRegistered() {
     // If there is any fragment that has registered for store changes we can unregister now
   }
 
-  @Override
-  public void onRxStoresRegister() {
+  @Override public void onRxStoresRegister() {
     repositoriesStore = RepositoriesStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
     repositoriesStore.register();
     usersStore = UsersStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
@@ -136,8 +127,7 @@ public class MainActivity extends AppCompatActivity
     get(this).getGitHubActionCreator().getPublicRepositories();
   }
 
-  @Override
-  public void onClicked(GitHubRepo repo) {
+  @Override public void onClicked(GitHubRepo repo) {
     String login = repo.getOwner().getLogin();
     if (usersStore.getUser(login) != null) {
       showUserDialog(login);

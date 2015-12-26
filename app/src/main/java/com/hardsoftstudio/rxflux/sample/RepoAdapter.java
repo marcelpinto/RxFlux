@@ -18,23 +18,17 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
   private ArrayList<GitHubRepo> repos;
   private OnRepoClicked callback;
 
-  public interface OnRepoClicked {
-    void onClicked(GitHubRepo repo);
-  }
-
   public RepoAdapter() {
     super();
     repos = new ArrayList<GitHubRepo>();
   }
 
-  @Override
-  public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+  @Override public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
     return new ViewHolder(LayoutInflater.from(viewGroup.getContext())
         .inflate(R.layout.card_repository, viewGroup, false));
   }
 
-  @Override
-  public void onBindViewHolder(ViewHolder viewHolder, int i) {
+  @Override public void onBindViewHolder(ViewHolder viewHolder, int i) {
     GitHubRepo repo = repos.get(i);
     viewHolder.setUp(repo);
     viewHolder.itemView.setOnClickListener(view -> {
@@ -42,8 +36,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
     });
   }
 
-  @Override
-  public int getItemCount() {
+  @Override public int getItemCount() {
     return repos.size();
   }
 
@@ -56,10 +49,14 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
     this.callback = callback;
   }
 
+  public interface OnRepoClicked {
+    void onClicked(GitHubRepo repo);
+  }
+
   class ViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.name) TextView nameView;
     @Bind(R.id.description) public TextView descView;
     @Bind(R.id.id) public TextView idView;
+    @Bind(R.id.name) TextView nameView;
 
     public ViewHolder(View itemView) {
       super(itemView);

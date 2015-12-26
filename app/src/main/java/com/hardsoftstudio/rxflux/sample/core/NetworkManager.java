@@ -10,8 +10,8 @@ public class NetworkManager {
   private static GitHubApi instance;
 
   private static void build() {
-    final RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(
-        GitHubApi.SERVICE_ENDPOINT).build();
+    final RestAdapter restAdapter =
+        new RestAdapter.Builder().setEndpoint(GitHubApi.SERVICE_ENDPOINT).build();
     instance = restAdapter.create(GitHubApi.class);
   }
 

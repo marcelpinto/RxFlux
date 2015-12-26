@@ -27,8 +27,7 @@ public class RepositoriesStore extends RxStore implements RepositoriesStoreInter
     return instance;
   }
 
-  @Override
-  public void onRxAction(RxAction action) {
+  @Override public void onRxAction(RxAction action) {
     switch (action.getType()) {
       case Actions.GET_PUBLIC_REPOS:
         this.gitHubRepos = action.get(Keys.PUBLIC_REPOS);
@@ -39,8 +38,7 @@ public class RepositoriesStore extends RxStore implements RepositoriesStoreInter
     postChange(new RxStoreChange(ID, action));
   }
 
-  @Override
-  public ArrayList<GitHubRepo> getRepositories() {
+  @Override public ArrayList<GitHubRepo> getRepositories() {
     return gitHubRepos == null ? new ArrayList<GitHubRepo>() : gitHubRepos;
   }
 }

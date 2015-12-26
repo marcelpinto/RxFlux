@@ -5,7 +5,6 @@ import com.hardsoftstudio.rxflux.action.RxAction;
 import com.hardsoftstudio.rxflux.action.RxError;
 import com.hardsoftstudio.rxflux.store.RxStoreChange;
 import com.hardsoftstudio.rxflux.util.LoggerManager;
-
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -41,13 +40,11 @@ public class Dispatcher {
     if (subscription == null || subscription.isUnsubscribed()) {
       logger.logRxStoreRegister(tag);
       rxActionMap.put(tag, bus.get().filter(new Func1<Object, Boolean>() {
-        @Override
-        public Boolean call(Object o) {
+        @Override public Boolean call(Object o) {
           return o instanceof RxAction;
         }
       }).subscribe(new Action1<Object>() {
-        @Override
-        public void call(Object o) {
+        @Override public void call(Object o) {
           logger.logRxAction(tag, (RxAction) o);
           object.onRxAction((RxAction) o);
         }
@@ -60,13 +57,11 @@ public class Dispatcher {
     Subscription subscription = rxActionMap.get(tag);
     if (subscription == null || subscription.isUnsubscribed()) {
       rxActionMap.put(tag, bus.get().filter(new Func1<Object, Boolean>() {
-        @Override
-        public Boolean call(Object o) {
+        @Override public Boolean call(Object o) {
           return o instanceof RxError;
         }
       }).subscribe(new Action1<Object>() {
-        @Override
-        public void call(Object o) {
+        @Override public void call(Object o) {
           logger.logRxError(tag, (RxError) o);
           object.onRxError((RxError) o);
         }
@@ -80,13 +75,11 @@ public class Dispatcher {
     if (subscription == null || subscription.isUnsubscribed()) {
       logger.logViewRegisterToStore(tag);
       rxStoreMap.put(tag, bus.get().filter(new Func1<Object, Boolean>() {
-        @Override
-        public Boolean call(Object o) {
+        @Override public Boolean call(Object o) {
           return o instanceof RxStoreChange;
         }
       }).subscribe(new Action1<Object>() {
-        @Override
-        public void call(Object o) {
+        @Override public void call(Object o) {
           logger.logRxStore(tag, (RxStoreChange) o);
           object.onRxStoreChanged((RxStoreChange) o);
         }
@@ -145,5 +138,4 @@ public class Dispatcher {
   public void postRxStoreChange(final RxStoreChange storeChange) {
     bus.send(storeChange);
   }
-
 }

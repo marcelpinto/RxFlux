@@ -13,11 +13,14 @@ import com.hardsoftstudio.rxflux.sample.stores.UsersStore;
 
 public class UserFragment extends DialogFragment {
   private static final String ARG_USER_ID = "userId";
-  private String userId;
-
   @Bind(R.id.user_name) TextView userNameView;
   @Bind(R.id.login) TextView loginView;
   @Bind(R.id.statistics) TextView statsView;
+  private String userId;
+
+  public UserFragment() {
+    // Required empty public constructor
+  }
 
   public static UserFragment newInstance(String userId) {
     UserFragment fragment = new UserFragment();
@@ -27,12 +30,7 @@ public class UserFragment extends DialogFragment {
     return fragment;
   }
 
-  public UserFragment() {
-    // Required empty public constructor
-  }
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
+  @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setStyle(DialogFragment.STYLE_NO_FRAME, android.R.style.Theme_Dialog);
     if (getArguments() != null) {
@@ -42,8 +40,7 @@ public class UserFragment extends DialogFragment {
     }
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_user, container, false);
     view.setOnClickListener(view1 -> {
@@ -52,11 +49,10 @@ public class UserFragment extends DialogFragment {
     return view;
   }
 
-  @Override
-  public void onViewCreated(View view, Bundle savedInstanceState) {
+  @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    GitUser user = UsersStore.get(SampleApp.get(getActivity()).getRxFlux().getDispatcher())
-        .getUser(userId);
+    GitUser user =
+        UsersStore.get(SampleApp.get(getActivity()).getRxFlux().getDispatcher()).getUser(userId);
     userNameView.setText(user.getName());
     loginView.setText(user.getLogin());
     statsView.setText(getStats(user));
@@ -70,8 +66,7 @@ public class UserFragment extends DialogFragment {
     return stats.toString();
   }
 
-  @Override
-  public void onDestroyView() {
+  @Override public void onDestroyView() {
     super.onDestroyView();
     ButterKnife.unbind(this);
   }

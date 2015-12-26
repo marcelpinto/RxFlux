@@ -20,20 +20,17 @@ public class SubscriptionManagerTest {
   private static final String KEY1 = "key1";
   private SubscriptionManager manager;
 
-  @Before
-  public void setUp() throws Exception {
+  @Before public void setUp() throws Exception {
 
     manager = SubscriptionManager.getInstance();
   }
 
-  @After
-  public void tearDown() throws Exception {
+  @After public void tearDown() throws Exception {
     manager.clear();
     manager = null;
   }
 
-  @Test
-  public void testManager() throws Exception {
+  @Test public void testManager() throws Exception {
     RxAction action = RxAction.type(TYPE).bundle(KEY1, 1).build();
     manager.add(action, Observable.just(0).subscribe());
     assertFalse(manager.contains(action));
@@ -51,5 +48,4 @@ public class SubscriptionManagerTest {
     manager.add(action, s2);
     assertTrue(s1.isUnsubscribed());
   }
-
 }

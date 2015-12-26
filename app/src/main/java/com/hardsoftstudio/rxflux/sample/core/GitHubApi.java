@@ -14,9 +14,7 @@ public interface GitHubApi {
 
   String SERVICE_ENDPOINT = "https://api.github.com";
 
-  @GET("/repositories")
-  Observable<ArrayList<GitHubRepo>> getRepositories();
+  @GET("/repositories") Observable<ArrayList<GitHubRepo>> getRepositories();
 
-  @GET("/users/{id}")
-  Observable<GitUser> getUser(@Path("id") String userId);
+  @GET("/users/{id}") Observable<GitUser> getUser(@Path("id") String userId);
 }
