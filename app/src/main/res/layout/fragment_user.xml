@@ -5,7 +5,7 @@
     android:background="#FFF"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".ui.userfragment.UserFragment"
+    tools:context=".ui.UserFragment"
     >
 
   <TextView

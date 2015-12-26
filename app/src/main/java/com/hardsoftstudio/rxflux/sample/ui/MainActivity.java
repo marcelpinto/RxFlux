@@ -1,4 +1,4 @@
-package com.hardsoftstudio.rxflux.sample.ui.mainactivity;
+package com.hardsoftstudio.rxflux.sample.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -18,7 +17,6 @@ import com.hardsoftstudio.rxflux.action.RxError;
 import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
 import com.hardsoftstudio.rxflux.sample.R;
 import com.hardsoftstudio.rxflux.sample.SampleApp;
-import com.hardsoftstudio.rxflux.sample.ui.userfragment.UserFragment;
 import com.hardsoftstudio.rxflux.sample.actions.Actions;
 import com.hardsoftstudio.rxflux.sample.actions.Keys;
 import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;

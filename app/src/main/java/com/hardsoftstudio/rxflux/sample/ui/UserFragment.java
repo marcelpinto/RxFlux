@@ -1,4 +1,4 @@
-package com.hardsoftstudio.rxflux.sample.ui.userfragment;
+package com.hardsoftstudio.rxflux.sample.ui;
 
 import android.app.Fragment;
 import android.os.Bundle;
