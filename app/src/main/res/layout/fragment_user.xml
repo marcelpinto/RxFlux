@@ -1,18 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="#FFF"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context="com.hardsoftstudio.rxflux.sample.UserFragment"
->
+    tools:context=".ui.userfragment.UserFragment"
+    >
 
   <TextView
       android:id="@+id/user_name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textStyle="bold"
       android:textSize="20sp"
+      android:textStyle="bold"
       tools:text="User name"
   />
 
@@ -27,8 +28,8 @@
   <View
       android:layout_width="match_parent"
       android:layout_height="1dp"
-      android:layout_marginTop="10dp"
       android:layout_marginBottom="10dp"
+      android:layout_marginTop="10dp"
       android:background="#60000000"
   />
 

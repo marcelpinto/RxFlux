@@ -1,4 +1,4 @@
-package com.hardsoftstudio.rxflux.sample;
+package com.hardsoftstudio.rxflux.sample.ui.mainactivity;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -9,12 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.hardsoftstudio.rxflux.action.RxError;
 import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
+import com.hardsoftstudio.rxflux.sample.R;
+import com.hardsoftstudio.rxflux.sample.SampleApp;
+import com.hardsoftstudio.rxflux.sample.ui.userfragment.UserFragment;
 import com.hardsoftstudio.rxflux.sample.actions.Actions;
 import com.hardsoftstudio.rxflux.sample.actions.Keys;
 import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
@@ -24,12 +28,10 @@ import com.hardsoftstudio.rxflux.store.RxStoreChange;
 
 import static com.hardsoftstudio.rxflux.sample.SampleApp.get;
 
-public class MainActivity extends AppCompatActivity
-    implements RxViewDispatch, RepoAdapter.OnRepoClicked {
+public class MainActivity extends AppCompatActivity implements RxViewDispatch, RepoAdapter.OnRepoClicked {
 
-  private static final String TAG = "MainActivity";
   @Bind(R.id.recycler_view) RecyclerView recyclerView;
-  @Bind(R.id.loading_frame) TextView loadingFrame;
+  @Bind(R.id.progress_loading) ProgressBar progress_loading;
   @Bind(R.id.root_coordinator) CoordinatorLayout coordinatorLayout;
   private RepoAdapter adapter;
   private UsersStore usersStore;
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity
       case UsersStore.ID:
         switch (change.getRxAction().getType()) {
           case Actions.GET_USER:
-            showUserDialog((String) change.getRxAction().getData().get(Keys.ID));
+            showUserFragment((String) change.getRxAction().getData().get(Keys.ID));
         }
     }
   }
@@ -89,10 +91,7 @@ public class MainActivity extends AppCompatActivity
     setLoadingFrame(false);
     Throwable throwable = error.getThrowable();
     if (throwable != null) {
-      Snackbar.make(coordinatorLayout, "An error ocurred", Snackbar.LENGTH_INDEFINITE)
-          .setAction("Retry",
-              v -> SampleApp.get(this).getGitHubActionCreator().retry(error.getAction()))
-          .show();
+      Snackbar.make(coordinatorLayout, "An error ocurred", Snackbar.LENGTH_INDEFINITE).setAction("Retry", v -> SampleApp.get(this).getGitHubActionCreator().retry(error.getAction())).show();
     } else {
       Toast.makeText(this, "Unknown error", Toast.LENGTH_LONG).show();
     }
@@ -113,13 +112,14 @@ public class MainActivity extends AppCompatActivity
     usersStore.register();
   }
 
-  private void showUserDialog(String id) {
-    UserFragment dialog = UserFragment.newInstance(id);
-    dialog.show(getSupportFragmentManager(), UserFragment.class.getName());
+  private void showUserFragment(String id) {
+
+    UserFragment user_fragment = UserFragment.newInstance(id);
+    getFragmentManager().beginTransaction().replace(R.id.root, user_fragment).addToBackStack(null).commit();
   }
 
   private void setLoadingFrame(boolean show) {
-    loadingFrame.setVisibility(show ? View.VISIBLE : View.GONE);
+    progress_loading.setVisibility(show ? View.VISIBLE : View.GONE);
   }
 
   private void refresh() {
@@ -130,10 +130,19 @@ public class MainActivity extends AppCompatActivity
   @Override public void onClicked(GitHubRepo repo) {
     String login = repo.getOwner().getLogin();
     if (usersStore.getUser(login) != null) {
-      showUserDialog(login);
+      showUserFragment(login);
       return;
     }
     setLoadingFrame(true);
     SampleApp.get(this).getGitHubActionCreator().getUserDetails(login);
+  }
+
+  @Override public void onBackPressed() {
+    int count = getFragmentManager().getBackStackEntryCount();
+    if (count == 0) {
+      super.onBackPressed();
+    } else {
+      getFragmentManager().popBackStack();
+    }
   }
 }

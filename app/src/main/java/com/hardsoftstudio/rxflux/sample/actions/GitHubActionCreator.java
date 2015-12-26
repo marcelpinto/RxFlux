@@ -3,7 +3,7 @@ package com.hardsoftstudio.rxflux.sample.actions;
 import com.hardsoftstudio.rxflux.action.RxAction;
 import com.hardsoftstudio.rxflux.action.RxActionCreator;
 import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
-import com.hardsoftstudio.rxflux.sample.core.NetworkManager;
+import com.hardsoftstudio.rxflux.sample.core.GitHubApi;
 import com.hardsoftstudio.rxflux.util.SubscriptionManager;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -29,19 +29,18 @@ public class GitHubActionCreator extends RxActionCreator implements Actions {
     final RxAction action = newRxAction(GET_PUBLIC_REPOS);
     if (hasRxAction(action)) return;
 
-    addRxAction(action, NetworkManager.getApi()
+    addRxAction(action, GitHubApi.Factory.getApi()
         .getRepositories()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(repos -> postRxAction(newRxAction(GET_PUBLIC_REPOS, PUBLIC_REPOS, repos)),
-            throwable -> postError(action, throwable)));
+        .subscribe(repos -> postRxAction(newRxAction(GET_PUBLIC_REPOS, PUBLIC_REPOS, repos)), throwable -> postError(action, throwable)));
   }
 
   @Override public void getUserDetails(String userId) {
     final RxAction action = newRxAction(GET_USER, Keys.ID, userId);
     if (hasRxAction(action)) return;
 
-    addRxAction(action, NetworkManager.getApi()
+    addRxAction(action, GitHubApi.Factory.getApi()
         .getUser(userId)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())

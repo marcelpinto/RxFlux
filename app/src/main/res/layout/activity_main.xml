@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e0e0e0"
-    tools:context=".MainActivity"
->
+    tools:context=".ui.mainactivity.MainActivity"
+    >
   <RelativeLayout
       android:id="@+id/root"
       android:layout_width="match_parent"
@@ -21,17 +21,17 @@
         android:layout_height="match_parent"
     />
 
-    <TextView
-        android:id="@+id/loading_frame"
-        android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:background="#a0000000"
-        android:textColor="@android:color/white"
         android:visibility="gone"
-        android:text="Loading, please wait..."
         tools:visibility="visible"
-    />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="true"
+        />
+
 
   </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

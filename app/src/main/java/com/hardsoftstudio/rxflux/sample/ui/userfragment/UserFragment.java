@@ -1,17 +1,19 @@
-package com.hardsoftstudio.rxflux.sample;
+package com.hardsoftstudio.rxflux.sample.ui.userfragment;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.hardsoftstudio.rxflux.sample.R;
+import com.hardsoftstudio.rxflux.sample.SampleApp;
 import com.hardsoftstudio.rxflux.sample.model.GitUser;
 import com.hardsoftstudio.rxflux.sample.stores.UsersStore;
 
-public class UserFragment extends DialogFragment {
+public class UserFragment extends Fragment {
   private static final String ARG_USER_ID = "userId";
   @Bind(R.id.user_name) TextView userNameView;
   @Bind(R.id.login) TextView loginView;
@@ -32,27 +34,22 @@ public class UserFragment extends DialogFragment {
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setStyle(DialogFragment.STYLE_NO_FRAME, android.R.style.Theme_Dialog);
+
     if (getArguments() != null) {
       userId = getArguments().getString(ARG_USER_ID);
-    } else {
-      getActivity().getSupportFragmentManager().popBackStack();
     }
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_user, container, false);
-    view.setOnClickListener(view1 -> {
-    });
+
     ButterKnife.bind(this, view);
     return view;
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    GitUser user =
-        UsersStore.get(SampleApp.get(getActivity()).getRxFlux().getDispatcher()).getUser(userId);
+    GitUser user = UsersStore.get(SampleApp.get(getActivity()).getRxFlux().getDispatcher()).getUser(userId);
     userNameView.setText(user.getName());
     loginView.setText(user.getLogin());
     statsView.setText(getStats(user));
