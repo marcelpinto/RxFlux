@@ -51,10 +51,10 @@ dependencies {
   compile "com.android.support:cardview-v7:23.1.1"
 
   //----- Retrofit
-  compile "com.squareup.retrofit:retrofit:2.0.0-beta2"
-  compile "com.squareup.retrofit:converter-gson:2.0.0-beta2"
-  compile "com.squareup.retrofit:adapter-rxjava:2.0.0-beta2"
-  compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
+  compile "com.squareup.retrofit2:retrofit:2.0.0-beta3"
+  compile "com.squareup.retrofit2:converter-gson:2.0.0-beta3"
+  compile "com.squareup.retrofit2:adapter-rxjava:2.0.0-beta3"
+  compile 'com.squareup.okhttp3:logging-interceptor:3.0.0-RC1'
 
   //---- Butterknife
   compile 'com.jakewharton:butterknife:7.0.0'
