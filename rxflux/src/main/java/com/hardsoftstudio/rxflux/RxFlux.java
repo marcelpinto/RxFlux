@@ -3,11 +3,15 @@ package com.hardsoftstudio.rxflux;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+
 import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
 import com.hardsoftstudio.rxflux.dispatcher.RxBus;
 import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
+import com.hardsoftstudio.rxflux.store.RxStore;
 import com.hardsoftstudio.rxflux.util.LogLevel;
 import com.hardsoftstudio.rxflux.util.SubscriptionManager;
+
+import java.util.List;
 
 /**
  * Created by marcel on 09/09/15.
@@ -42,7 +46,7 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
   public static void shutdown() {
     if (instance == null) return;
     instance.subscriptionManager.clear();
-    instance.dispatcher.unregisterAll();
+    instance.dispatcher.unsubscribeAll();
   }
 
   /**
@@ -69,28 +73,31 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
   @Override public void onActivityCreated(Activity activity, Bundle bundle) {
     activityCounter++;
     if (activity instanceof RxViewDispatch) {
-      ((RxViewDispatch) activity).onRxStoresRegister();
+      List<RxStore> rxStoreList = ((RxViewDispatch) activity).getRxStoreListToRegister();
+      for (RxStore rxStore: rxStoreList) {
+        rxStore.register();
+      }
     }
   }
 
   @Override public void onActivityStarted(Activity activity) {
-
+    if (activity instanceof RxViewDispatch) {
+      dispatcher.subscribeRxView((RxViewDispatch) activity);
+      ((RxViewDispatch) activity).onRxViewRegistered();
+    }
   }
 
   @Override public void onActivityResumed(Activity activity) {
-    if (activity instanceof RxViewDispatch) {
-      dispatcher.registerRxStore((RxViewDispatch) activity);
-    }
   }
 
   @Override public void onActivityPaused(Activity activity) {
-    if (activity instanceof RxViewDispatch) {
-      dispatcher.unregisterRxStore((RxViewDispatch) activity);
-    }
   }
 
   @Override public void onActivityStopped(Activity activity) {
-
+    if (activity instanceof RxViewDispatch) {
+      dispatcher.unsubscribeRxView((RxViewDispatch) activity);
+      ((RxViewDispatch) activity).onRxViewUnRegistered();
+    }
   }
 
   @Override public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
@@ -99,6 +106,11 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
 
   @Override public void onActivityDestroyed(Activity activity) {
     activityCounter--;
+
+    List<RxStore> rxStoreList = ((RxViewDispatch) activity).getRxStoreListToUnRegister();
+    for (RxStore rxStore: rxStoreList) {
+      dispatcher.unsubscribeRxStore(rxStore);
+    }
 
     if (activityCounter == 0) {
       RxFlux.shutdown();

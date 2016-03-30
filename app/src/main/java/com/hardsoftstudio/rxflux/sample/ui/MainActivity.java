@@ -11,8 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.hardsoftstudio.rxflux.action.RxError;
 import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
 import com.hardsoftstudio.rxflux.sample.R;
@@ -22,7 +21,14 @@ import com.hardsoftstudio.rxflux.sample.actions.Keys;
 import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
 import com.hardsoftstudio.rxflux.sample.stores.RepositoriesStore;
 import com.hardsoftstudio.rxflux.sample.stores.UsersStore;
+import com.hardsoftstudio.rxflux.store.RxStore;
 import com.hardsoftstudio.rxflux.store.RxStoreChange;
+
+import java.util.Arrays;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 import static com.hardsoftstudio.rxflux.sample.SampleApp.get;
 
@@ -103,11 +109,16 @@ public class MainActivity extends AppCompatActivity implements RxViewDispatch, R
     // If there is any fragment that has registered for store changes we can unregister now
   }
 
-  @Override public void onRxStoresRegister() {
+  @Override
+  public List<RxStore> getRxStoreListToRegister() {
     repositoriesStore = RepositoriesStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
-    repositoriesStore.register();
     usersStore = UsersStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
-    usersStore.register();
+    return Arrays.asList(repositoriesStore, usersStore);
+  }
+
+  @Override
+  public List<RxStore> getRxStoreListToUnRegister() {
+    return null;
   }
 
   private void showUserFragment(String id) {
