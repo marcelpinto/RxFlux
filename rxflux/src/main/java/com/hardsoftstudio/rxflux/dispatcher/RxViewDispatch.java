@@ -27,7 +27,7 @@ public interface RxViewDispatch {
    * Called when an error occur in some point of the flux flow.
    *
    * @param error {@link RxError} containing the information for that specific error
-     */
+   */
   void onRxError(RxError error);
 
   /**

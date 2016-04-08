@@ -112,7 +112,7 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
     List<RxStore> rxStoreList = ((RxViewDispatch) activity).getRxStoreListToUnRegister();
     if (rxStoreList != null) {
       for (RxStore rxStore: rxStoreList) {
-        dispatcher.unsubscribeRxStore(rxStore);
+        rxStore.unregister();
       }
     }
 
