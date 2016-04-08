@@ -74,8 +74,10 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
     activityCounter++;
     if (activity instanceof RxViewDispatch) {
       List<RxStore> rxStoreList = ((RxViewDispatch) activity).getRxStoreListToRegister();
-      for (RxStore rxStore: rxStoreList) {
-        rxStore.register();
+      if (rxStoreList != null) {
+        for (RxStore rxStore: rxStoreList) {
+          rxStore.register();
+        }
       }
     }
   }
@@ -108,8 +110,10 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
     activityCounter--;
 
     List<RxStore> rxStoreList = ((RxViewDispatch) activity).getRxStoreListToUnRegister();
-    for (RxStore rxStore: rxStoreList) {
-      dispatcher.unsubscribeRxStore(rxStore);
+    if (rxStoreList != null) {
+      for (RxStore rxStore: rxStoreList) {
+        dispatcher.unsubscribeRxStore(rxStore);
+      }
     }
 
     if (activityCounter == 0) {
