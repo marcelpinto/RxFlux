@@ -17,7 +17,11 @@ public abstract class RxStore implements RxActionDispatch {
   }
 
   public void register() {
-    dispatcher.registerRxAction(this);
+    dispatcher.subscribeRxStore(this);
+  }
+
+  public void unregister() {
+    dispatcher.unsubscribeRxStore(this);
   }
 
   protected void postChange(RxStoreChange change) {

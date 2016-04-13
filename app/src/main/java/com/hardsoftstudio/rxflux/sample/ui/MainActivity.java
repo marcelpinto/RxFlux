@@ -1,6 +1,7 @@
 package com.hardsoftstudio.rxflux.sample.ui;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.hardsoftstudio.rxflux.action.RxError;
 import com.hardsoftstudio.rxflux.dispatcher.RxViewDispatch;
 import com.hardsoftstudio.rxflux.sample.R;
@@ -22,7 +22,14 @@ import com.hardsoftstudio.rxflux.sample.actions.Keys;
 import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
 import com.hardsoftstudio.rxflux.sample.stores.RepositoriesStore;
 import com.hardsoftstudio.rxflux.sample.stores.UsersStore;
+import com.hardsoftstudio.rxflux.store.RxStore;
 import com.hardsoftstudio.rxflux.store.RxStoreChange;
+
+import java.util.Arrays;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 import static com.hardsoftstudio.rxflux.sample.SampleApp.get;
 
@@ -66,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements RxViewDispatch, R
     refresh();
   }
 
-  @Override public void onRxStoreChanged(RxStoreChange change) {
+  @Override public void onRxStoreChanged(@NonNull RxStoreChange change) {
     setLoadingFrame(false);
 
     switch (change.getStoreId()) {
@@ -85,11 +92,12 @@ public class MainActivity extends AppCompatActivity implements RxViewDispatch, R
     }
   }
 
-  @Override public void onRxError(RxError error) {
+  @Override public void onRxError(@NonNull RxError error) {
     setLoadingFrame(false);
     Throwable throwable = error.getThrowable();
     if (throwable != null) {
       Snackbar.make(coordinatorLayout, "An error ocurred", Snackbar.LENGTH_INDEFINITE).setAction("Retry", v -> SampleApp.get(this).getGitHubActionCreator().retry(error.getAction())).show();
+      throwable.printStackTrace();
     } else {
       Toast.makeText(this, "Unknown error", Toast.LENGTH_LONG).show();
     }
@@ -103,11 +111,16 @@ public class MainActivity extends AppCompatActivity implements RxViewDispatch, R
     // If there is any fragment that has registered for store changes we can unregister now
   }
 
-  @Override public void onRxStoresRegister() {
+  @Override
+  public List<RxStore> getRxStoreListToRegister() {
     repositoriesStore = RepositoriesStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
-    repositoriesStore.register();
     usersStore = UsersStore.get(SampleApp.get(this).getRxFlux().getDispatcher());
-    usersStore.register();
+    return Arrays.asList(repositoriesStore, usersStore);
+  }
+
+  @Override
+  public List<RxStore> getRxStoreListToUnRegister() {
+    return null;
   }
 
   private void showUserFragment(String id) {
