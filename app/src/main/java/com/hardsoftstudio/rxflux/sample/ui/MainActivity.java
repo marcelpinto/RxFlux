@@ -1,6 +1,7 @@
 package com.hardsoftstudio.rxflux.sample.ui;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements RxViewDispatch, R
     refresh();
   }
 
-  @Override public void onRxStoreChanged(RxStoreChange change) {
+  @Override public void onRxStoreChanged(@NonNull RxStoreChange change) {
     setLoadingFrame(false);
 
     switch (change.getStoreId()) {
@@ -91,11 +92,12 @@ public class MainActivity extends AppCompatActivity implements RxViewDispatch, R
     }
   }
 
-  @Override public void onRxError(RxError error) {
+  @Override public void onRxError(@NonNull RxError error) {
     setLoadingFrame(false);
     Throwable throwable = error.getThrowable();
     if (throwable != null) {
       Snackbar.make(coordinatorLayout, "An error ocurred", Snackbar.LENGTH_INDEFINITE).setAction("Retry", v -> SampleApp.get(this).getGitHubActionCreator().retry(error.getAction())).show();
+      throwable.printStackTrace();
     } else {
       Toast.makeText(this, "Unknown error", Toast.LENGTH_LONG).show();
     }

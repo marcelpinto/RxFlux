@@ -1,6 +1,7 @@
 package com.hardsoftstudio.rxflux.dispatcher;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.hardsoftstudio.rxflux.action.RxError;
@@ -21,14 +22,14 @@ public interface RxViewDispatch {
    * All the stores will call this event after they process an action and the store change it.
    * The view can react and request the needed data
    */
-  void onRxStoreChanged(RxStoreChange change);
+  void onRxStoreChanged(@NonNull RxStoreChange change);
 
   /**
    * Called when an error occur in some point of the flux flow.
    *
    * @param error {@link RxError} containing the information for that specific error
    */
-  void onRxError(RxError error);
+  void onRxError(@NonNull RxError error);
 
   /**
    * When an activity has been registered RxFlux will notify the activity so it can register
