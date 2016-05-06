@@ -3,12 +3,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 // This is the library version used when deploying the artifact
-version = "0.3.1"
+version = "0.3.2"
 group = "com.hardsoftstudio" // Maven Group ID for the artifact
 
 android {
   compileSdkVersion 23
-  buildToolsVersion "23.0.1"
+  buildToolsVersion "23.0.3"
 
   defaultConfig {
     minSdkVersion 15
@@ -25,10 +25,10 @@ android {
       def Properties keyProps = new Properties()
       assert localProps['keystore.props.file'];
       keyProps.load(new FileInputStream(file(localProps['keystore.props.file'])))
-      /*storeFile file(keyProps["store"])
+      storeFile file(keyProps["store"])
       keyAlias keyProps["alias"]
       storePassword keyProps["storePass"]
-      keyPassword keyProps["pass"]*/
+      keyPassword keyProps["pass"]
     }
   }
 
