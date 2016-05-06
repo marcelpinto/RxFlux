@@ -70,12 +70,14 @@ hs_err_pid*
 # Mongo Explorer plugin:
 # .idea/mongoSettings.xml
 
+/keystore.properties
 ## File-based project format:
 *.ipr
 *.iws
 
 ## Plugin-specific files:
 
+/rxflux/rxflux.iml
 # IntelliJ
 /out/
 
