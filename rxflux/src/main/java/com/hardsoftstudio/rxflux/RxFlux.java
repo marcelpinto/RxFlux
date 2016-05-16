@@ -109,10 +109,12 @@ public class RxFlux implements Application.ActivityLifecycleCallbacks {
   @Override public void onActivityDestroyed(Activity activity) {
     activityCounter--;
 
-    List<RxStore> rxStoreList = ((RxViewDispatch) activity).getRxStoreListToUnRegister();
-    if (rxStoreList != null) {
-      for (RxStore rxStore: rxStoreList) {
-        rxStore.unregister();
+    if (activity instanceof RxViewDispatch) {
+      List<RxStore> rxStoreList = ((RxViewDispatch) activity).getRxStoreListToUnRegister();
+      if (rxStoreList != null) {
+        for (RxStore rxStore : rxStoreList) {
+          rxStore.unregister();
+        }
       }
     }
 
