@@ -8,6 +8,7 @@ import com.hardsoftstudio.rxflux.store.RxStoreChange;
 import com.hardsoftstudio.rxflux.util.LoggerManager;
 
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -62,7 +63,8 @@ public class Dispatcher {
         @Override public Boolean call(Object o) {
           return o instanceof RxError;
         }
-      }).subscribe(new Action1<Object>() {
+      }).observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<Object>() {
         @Override public void call(Object o) {
           logger.logRxError(tag, (RxError) o);
           object.onRxError((RxError) o);
@@ -80,7 +82,8 @@ public class Dispatcher {
         @Override public Boolean call(Object o) {
           return o instanceof RxStoreChange;
         }
-      }).subscribe(new Action1<Object>() {
+      }).observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<Object>() {
         @Override public void call(Object o) {
           logger.logRxStore(tag, (RxStoreChange) o);
           object.onRxStoreChanged((RxStoreChange) o);
