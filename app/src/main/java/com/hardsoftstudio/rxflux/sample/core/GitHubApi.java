@@ -3,12 +3,11 @@ package com.hardsoftstudio.rxflux.sample.core;
 import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
 import com.hardsoftstudio.rxflux.sample.model.GitUser;
 import java.util.ArrayList;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
-import retrofit2.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -33,7 +32,11 @@ public interface GitHubApi {
       HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
       interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
-      final Retrofit retrofit = new Retrofit.Builder().baseUrl(GitHubApi.ENDPOINT).client(client).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build();
+      final Retrofit retrofit = new Retrofit.Builder()
+          .baseUrl(GitHubApi.ENDPOINT)
+          .client(client)
+          .addConverterFactory(GsonConverterFactory.create())
+          .addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build();
       instance = retrofit.create(GitHubApi.class);
     }
 
