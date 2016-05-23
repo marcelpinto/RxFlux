@@ -42,7 +42,7 @@ public class Dispatcher {
     Subscription subscription = rxActionMap.get(tag);
     if (subscription == null || subscription.isUnsubscribed()) {
       logger.logRxStoreRegister(tag);
-      rxActionMap.put(tag, bus.get().filter(new Func1<Object, Boolean>() {
+      rxActionMap.put(tag, bus.get().onBackpressureBuffer().filter(new Func1<Object, Boolean>() {
         @Override public Boolean call(Object o) {
           return o instanceof RxAction;
         }
@@ -59,7 +59,7 @@ public class Dispatcher {
     final String tag = object.getClass().getSimpleName() + "_error";
     Subscription subscription = rxActionMap.get(tag);
     if (subscription == null || subscription.isUnsubscribed()) {
-      rxActionMap.put(tag, bus.get().filter(new Func1<Object, Boolean>() {
+      rxActionMap.put(tag, bus.get().onBackpressureBuffer().filter(new Func1<Object, Boolean>() {
         @Override public Boolean call(Object o) {
           return o instanceof RxError;
         }
@@ -78,7 +78,7 @@ public class Dispatcher {
     Subscription subscription = rxStoreMap.get(tag);
     if (subscription == null || subscription.isUnsubscribed()) {
       logger.logViewRegisterToStore(tag);
-      rxStoreMap.put(tag, bus.get().filter(new Func1<Object, Boolean>() {
+      rxStoreMap.put(tag, bus.get().onBackpressureBuffer().filter(new Func1<Object, Boolean>() {
         @Override public Boolean call(Object o) {
           return o instanceof RxStoreChange;
         }
