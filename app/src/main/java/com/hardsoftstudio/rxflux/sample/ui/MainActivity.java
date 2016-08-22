@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements RxViewDispatch, R
 
   @Override
   public List<RxStore> getRxStoreListToUnRegister() {
-    return null;
+    return Arrays.asList(repositoriesStore, usersStore);
   }
 
   private void showUserFragment(String id) {

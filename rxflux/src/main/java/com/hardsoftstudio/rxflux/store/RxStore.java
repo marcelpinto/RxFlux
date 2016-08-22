@@ -1,8 +1,12 @@
 package com.hardsoftstudio.rxflux.store;
 
+import android.support.annotation.Nullable;
+
 import com.hardsoftstudio.rxflux.action.RxActionCreator;
 import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
 import com.hardsoftstudio.rxflux.dispatcher.RxActionDispatch;
+
+import java.util.List;
 
 /**
  * This class must be extended by each store of the app in order to recieve the actions dispatched
@@ -26,5 +30,10 @@ public abstract class RxStore implements RxActionDispatch {
 
   protected void postChange(RxStoreChange change) {
     dispatcher.postRxStoreChange(change);
+  }
+
+  @Nullable
+  public List<String> getActionListToUnsubscribe() {
+    return null;
   }
 }

@@ -1,5 +1,7 @@
 package com.hardsoftstudio.rxflux.sample.stores;
 
+import android.support.annotation.Nullable;
+
 import com.hardsoftstudio.rxflux.action.RxAction;
 import com.hardsoftstudio.rxflux.dispatcher.Dispatcher;
 import com.hardsoftstudio.rxflux.sample.actions.Actions;
@@ -8,6 +10,8 @@ import com.hardsoftstudio.rxflux.sample.model.GitHubRepo;
 import com.hardsoftstudio.rxflux.store.RxStore;
 import com.hardsoftstudio.rxflux.store.RxStoreChange;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by marcel on 10/09/15.
@@ -40,5 +44,11 @@ public class RepositoriesStore extends RxStore implements RepositoriesStoreInter
 
   @Override public ArrayList<GitHubRepo> getRepositories() {
     return gitHubRepos == null ? new ArrayList<GitHubRepo>() : gitHubRepos;
+  }
+
+  @Nullable
+  @Override
+  public List<String> getActionListToUnsubscribe() {
+    return Arrays.asList(Actions.GET_PUBLIC_REPOS);
   }
 }
