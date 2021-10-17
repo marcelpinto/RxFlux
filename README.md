@@ -1,3 +1,5 @@
+> **Disclaimer:** This library is no longer maintained use at your own risk.
+
 ## Introduction
 RxFlux is small light-weight framework that makes it easy to follow the [Flux pattern](https://facebook.github.io/flux/docs/overview.html) with RxJava functionalities.
 
