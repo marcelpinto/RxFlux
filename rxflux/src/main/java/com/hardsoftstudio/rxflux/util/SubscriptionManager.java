@@ -3,6 +3,9 @@ package com.hardsoftstudio.rxflux.util;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.Pair;
 import com.hardsoftstudio.rxflux.action.RxAction;
+
+import java.util.List;
+
 import rx.Subscription;
 
 /**
@@ -37,6 +40,14 @@ public final class SubscriptionManager {
   public void remove(RxAction action) {
     Pair<Integer, Subscription> old = mMap.remove(action.getType());
     if (old != null && !old.second.isUnsubscribed()) old.second.unsubscribe();
+  }
+
+  public void remove(List<String> types){
+    if (null == types) return;
+    for (String type : types) {
+      Pair<Integer, Subscription> old = mMap.remove(type);
+      if (old != null && !old.second.isUnsubscribed()) old.second.unsubscribe();
+    }
   }
 
   /**
